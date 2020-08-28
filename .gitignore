@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # Hidden Data
-User.dat
-Key.key
+.dat
+.key

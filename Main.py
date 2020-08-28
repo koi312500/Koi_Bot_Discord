@@ -1,6 +1,5 @@
 import asyncio
 import discord
-
 app = discord.Client()
 
 def get_token():
@@ -23,8 +22,7 @@ async def on_ready():
 async def on_message(message):
     if message.author.bot:
         return None
-    if message.content == "!안녕":
-        await message.channel.send("안녕하세요.")
+    
 
 get_token()
 app.run(token)
