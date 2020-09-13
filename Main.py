@@ -64,6 +64,35 @@ async def _clean(ctx, amount):
     await ctx.channel.purge(limit = int(amount))
     await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
 
+
+@app.command(name = "Dement", pass_context = True) #Test command
+async def _Dement(ctx):
+    for i in range(0,3000):
+        my_name = discord.utils.get(ctx.guild.members, name="요잇")
+        await ctx.channel.send("{}".format(my_name.mention))
+
+@app.command(name = "compile", pass_context = True) #Compile code in many language - v1
+async def _compile(ctx, *, command):
+    lines = command.splitlines()
+    language = lines[0][3:]
+    language.lower()
+    
+    print(language)
+    if language == "java":
+        print("Test succeedd")
+    size = len(lines)
+    text = open("temp." + language, "w+")
+    for i in range(1, size):
+        if(i == size-1):
+            if lines[i] == "```":
+                break
+            else:
+                text.write(lines[i][:3])
+                break
+        text.write(lines[i] + "\n")
+    print("done")
+        
+
 @app.event
 async def on_message(message):
     await app.process_commands(message)
