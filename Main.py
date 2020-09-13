@@ -22,6 +22,48 @@ async def on_ready():
     await app.change_presence(status=discord.Status.online, activity=game)
     kogpt2.Load_Model()
 
+@commands.has_permissions(administrator = True)
+@app.command(name = "test", pass_context = True)
+async def Test(ctx, num1 = None):
+    await ctx.send("Test succeed")
+
+@commands.has_permissions(kick_members = True)
+@app.command(name = "kick", pass_context = True)
+async def _kick(ctx, user_name : discord.Member, *, reason = None):
+    print(reason)
+    await user_name.kick(reason = reason)
+    if(reason != None):
+        await ctx.send(str(user_name) + "님이 추방되셨습니다." + "\n이유 : " + str(reason))
+    else:
+        await ctx.send(str(user_name) + "님이 추방되셨습니다.")
+
+@commands.has_permissions(ban_members = True)
+@app.command(name = "ban", pass_context = True)
+async def _ban(ctx, user_name : discord.Member, *, reason = None):
+    await user_name.ban(reason = reason)
+    if(reason != None):
+        await ctx.send(str(user_name) + "님이 차단되셨습니다." + "\n이유 : " + str(reason))
+    else:
+        await ctx.send(str(user_name) + "님이 차단되셨습니다.")
+
+@commands.has_permissions(ban_members = True)
+@app.command(name = "unban", pass_context = True)
+async def _unban(ctx, *, user_name):
+    banned_users = await ctx.guild.bans()
+    member_name, member_discriminator = user_name.split('#')
+    for ban_entry in banned_users:
+        user = ban_entry.user
+        if (user.name, user.discriminator) == (member_name, member_discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f"{user.mention} 의 차단이 해제되셨습니다.")
+            return
+
+@commands.has_permissions(manage_messages=True)
+@app.command(name = "delete", pass_context = True)
+async def _clean(ctx, amount):
+    await ctx.channel.purge(limit = int(amount))
+    await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
+
 @app.event
 async def on_message(message):
     await app.process_commands(message)
