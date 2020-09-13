@@ -2,8 +2,10 @@ import asyncio
 import discord
 from discord.ext import commands
 import sys
+import datetime
 sys.path.insert(1, 'KoGPT2-chatbot')
 import AI_talk as kogpt2
+from subprocess import Popen, PIPE, STDOUT
 
 app = commands.Bot(command_prefix = "//")
 
@@ -71,27 +73,39 @@ async def _Dement(ctx):
         my_name = discord.utils.get(ctx.guild.members, name="요잇")
         await ctx.channel.send("{}".format(my_name.mention))
 
-@app.command(name = "compile", pass_context = True) #Compile code in many language - v1
+languages = ["java", "python", "c++", "c", "kotlin", "py"]
+@app.command(name = "compile", pass_context = True) #Compile code in many language - v2
 async def _compile(ctx, *, command):
     lines = command.splitlines()
-    language = lines[0][3:]
+    language = lines[0][3:] 
     language.lower()
+    if language in languages:
+        size = len(lines)
+        now = datetime.datetime.now()
+        nowDatetime = now.strftime('%Y-%m-%d-%H:%M:%S')
+        filename = "temp_" + str(nowDatetime) + ctx.message.author
+        if language is "kotlin":
+            filename = filename + ".kt"
+        else:
+            filename = filename + "." + language
+        text = open(filename, "w+")
+        for i in range(1, size):
+            if(i == size-1):
+                if lines[i] == "```":
+                    break
+                else:
+                    text.write(lines[i][:3])
+                    break
+            text.write(lines[i] + "\n")
+        text.close()
+        if language is "java": # 컴파일러 어떻게..
+            os.system("javac " + filename)
+        else:
+            a = a
+    else:
+        await ctx.send(language + "는 지원되지 않는 언어입니다")
+        await ctx.send("사용 가능한 메세지 목록:" + languages)
     
-    print(language)
-    if language == "java":
-        print("Test succeedd")
-    size = len(lines)
-    text = open("temp." + language, "w+")
-    for i in range(1, size):
-        if(i == size-1):
-            if lines[i] == "```":
-                break
-            else:
-                text.write(lines[i][:3])
-                break
-        text.write(lines[i] + "\n")
-    print("done")
-        
 
 @app.event
 async def on_message(message):
