@@ -1,121 +1,102 @@
 import asyncio
 import discord
+import os
 from discord.ext import commands
 import sys
-import datetime
 sys.path.insert(1, 'KoGPT2-chatbot')
 import AI_talk as kogpt2
-from subprocess import Popen, PIPE, STDOUT
 
 app = commands.Bot(command_prefix = "//")
+app.remove_command("help")
 
-def get_token():
-    global token
-    f = open("Key.key", "r")
-    token = str(f.readline())
+def get_token(): # Get tokens from key.key
+    with open("Key.key", "r") as f:
+        return f.readline().strip()
 
-@app.event
+@app.event # Statement changing
 async def on_ready():
-    print("다음으로 로그인합니다 : ")
-    print(app.user.name)
-    print(app.user.id)
-    print("==========")
-    game = discord.Game("Koi Bot이 정상 실행 중입니다!")
-    await app.change_presence(status=discord.Status.online, activity=game)
-    kogpt2.Load_Model()
+    print("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
+    game = discord.Game("Now updating Koi Bot")
+    await app.change_presence(status=discord.Status.idle, activity=game)
 
-@commands.has_permissions(administrator = True)
-@app.command(name = "test", pass_context = True)
-async def Test(ctx, num1 = None):
-    await ctx.send("Test succeed")
+for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
+    if filename.endswith(".py"):
+        app.load_extension(f"Cogs.{filename[:-3]}")
 
-@commands.has_permissions(kick_members = True)
-@app.command(name = "kick", pass_context = True)
-async def _kick(ctx, user_name : discord.Member, *, reason = None):
-    print(reason)
-    await user_name.kick(reason = reason)
-    if(reason != None):
-        await ctx.send(str(user_name) + "님이 추방되셨습니다." + "\n이유 : " + str(reason))
+@app.command(name="load")
+async def load_commands(ctx, extension):
+    app.load_extension(f"Cogs.{extension}")
+    await ctx.send(f"{extension} is loaded successfully!")
+
+@app.command(name="unload")
+async def unload_commands(ctx, extension):
+    app.unload_extension(f"Cogs.{extension}")
+    await ctx.send(f"{extension} is unloaded successfully!")
+
+@app.command(name="reload")
+async def reload_commands(ctx, extension=None):
+    if extension is None:
+        for filename in os.listdir("Cogs"):
+            if filename.endswith(".py"):
+                app.unload_extension(f"Cogs.{filename[:-3]}")
+                app.load_extension(f"Cogs.{filename[:-3]}")
+        await ctx.send("All extension is reloaded successfully!")
     else:
-        await ctx.send(str(user_name) + "님이 추방되셨습니다.")
+        app.unload_extension(f"Cogs.{extension}")
+        app.load_extension(f"Cogs.{extension}")
+        await ctx.send(f"{extension} is reloaded successfully!")
 
-@commands.has_permissions(ban_members = True)
-@app.command(name = "ban", pass_context = True)
-async def _ban(ctx, user_name : discord.Member, *, reason = None):
-    await user_name.ban(reason = reason)
-    if(reason != None):
-        await ctx.send(str(user_name) + "님이 차단되셨습니다." + "\n이유 : " + str(reason))
-    else:
-        await ctx.send(str(user_name) + "님이 차단되셨습니다.")
+@app.command(name = "help") # Help command
+async def help_command(ctx,func = None):
+    cog_list = ["ServerManagement", "Compile", "Development"]
+    if func is None:
+        embed = discord.Embed(title="Koi_Bot 도움말", description="명령 구문은 //`명령어` 입니다.", color=0x00ffff) 
+        embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
+        for x in cog_list:
+            cog_data = app.get_cog(x)
+            command_list = cog_data.get_commands()
+            embed.add_field(name=x, value=" ".join([c.name for c in command_list]), inline=True) 
+        await ctx.send(embed=embed)
+    else: # func가 None이 아니면
+        command_notfound = True # 이걸 어떻게 쓸지 생각해보세요!
+        for _title, cog in app.cogs.items(): # title, cog로 item을 돌려주는데 title은 필요가 없습니다.
+            if not command_notfound: # False면
+                break # 반복문 나가기
 
-@commands.has_permissions(ban_members = True)
-@app.command(name = "unban", pass_context = True)
-async def _unban(ctx, *, user_name):
-    banned_users = await ctx.guild.bans()
-    member_name, member_discriminator = user_name.split('#')
-    for ban_entry in banned_users:
-        user = ban_entry.user
-        if (user.name, user.discriminator) == (member_name, member_discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f"{user.mention} 의 차단이 해제되셨습니다.")
-            return
-
-@commands.has_permissions(manage_messages=True)
-@app.command(name = "delete", pass_context = True)
-async def _clean(ctx, amount):
-    await ctx.channel.purge(limit = int(amount))
-    await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
-
-
-@app.command(name = "Dement", pass_context = True) #Test command
-async def _Dement(ctx):
-    for i in range(0,3000):
-        my_name = discord.utils.get(ctx.guild.members, name="요잇")
-        await ctx.channel.send("{}".format(my_name.mention))
-
-languages = ["java", "python", "c++", "c", "kotlin", "py"]
-@app.command(name = "compile", pass_context = True) #Compile code in many language - v2
-async def _compile(ctx, *, command):
-    lines = command.splitlines()
-    language = lines[0][3:] 
-    language.lower()
-    if language in languages:
-        size = len(lines)
-        now = datetime.datetime.now()
-        nowDatetime = now.strftime('%Y-%m-%d-%H:%M:%S')
-        filename = "temp_" + str(nowDatetime) + ctx.message.author
-        if language is "kotlin":
-            filename = filename + ".kt"
-        else:
-            filename = filename + "." + language
-        text = open(filename, "w+")
-        for i in range(1, size):
-            if(i == size-1):
-                if lines[i] == "```":
-                    break
-                else:
-                    text.write(lines[i][:3])
-                    break
-            text.write(lines[i] + "\n")
-        text.close()
-        if language is "java": # 컴파일러 어떻게..
-            os.system("javac " + filename)
-        else:
-            a = a
-    else:
-        await ctx.send(language + "는 지원되지 않는 언어입니다")
-        await ctx.send("사용 가능한 메세지 목록:" + languages)
-    
+            else: # 아니면
+                for title in cog.get_commands(): # 명령어를 아까처럼 구하고 title에 순차적으로 넣습니다.
+                    if title.name == func: # title.name이 func와 같으면
+                        cmd = app.get_command(title.name) # title의 명령어 데이터를 구합니다.
+                        embed = discord.Embed(title=f"명령어 : {cmd}", description=cmd.help, color=0x00ffff) # Embed 만들기
+                        embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
+                        embed.add_field(name="사용법", value=cmd.usage) # 사용법 추가
+                        await ctx.send(embed=embed) # 보내기
+                        command_notfound = False
+                        break # 반복문 나가기
+                    else:
+                        command_notfound = True
+        
+        if command_notfound:
+            if func in cog_list:
+                cog_data = app.get_cog(func)
+                command_list = cog_data.get_commands()
+                embed = discord.Embed(title=f"Category : {cog_data.qualified_name}", description=cog_data.description, color=0x00ffff)
+                embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
+                embed.add_field(name="Commands", value=", ".join([c.name for c in command_list]))
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send("그런 이름의 명령어나 카테고리는 없습니다.")
 
 @app.event
 async def on_message(message):
     await app.process_commands(message)
     if message.author.bot:
         return None
+    if message.content[:2] == "//":
+        await message.channel.send("Now updating Koi_Bot. Be aware of data.")
     if message.content[:4] == "코이야 ":
         await message.channel.send(kogpt2.Chat_To_AI(message.content[4:]))
         print(message.content)
     
 
-get_token()
-app.run(token)
+app.run(get_token())
