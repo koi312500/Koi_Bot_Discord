@@ -7,7 +7,7 @@ class ServerManagement(commands.Cog):
         self.app = app
     
     @commands.has_permissions(kick_members = True)
-    @commands.command(name = "kick", help = "멤버를 추방합니다.")
+    @commands.command(name = "kick", help = "멤버를 추방합니다.", usage = "//kick 대상(멘션)\nEx : //kick @AKMU_LOVE#4211")
     async def kick_command(self, ctx, user_name : discord.Member, *, reason = None):
         await user_name.kick(reason = reason)
         if(reason != None):
@@ -16,7 +16,7 @@ class ServerManagement(commands.Cog):
             await ctx.send(str(user_name) + "님이 추방되셨습니다.")
 
     @commands.has_permissions(ban_members = True)
-    @commands.command(name = "ban")
+    @commands.command(name = "ban", help = "멤버를 차단합니다.", usage = "//ban 대상(멘션)\nEx : //ban @AKMU_LOVE#4211")
     async def ban_command(self, ctx, user_name : discord.Member, *, reason = None):
         await user_name.ban(reason = reason)
         if(reason != None):
@@ -25,7 +25,7 @@ class ServerManagement(commands.Cog):
             await ctx.send(str(user_name) + "님이 차단되셨습니다.")
 
     @commands.has_permissions(ban_members = True)
-    @commands.command(name = "unban")
+    @commands.command(name = "unban", help = "멤버의 차단을 해제합니다.", usage = "//unban 대상(멘션 X)\nEx : //unban AKMU_LOVE#4211")
     async def unban_command(self, ctx, *, user_name):
         banned_users = await ctx.guild.bans()
         member_name, member_discriminator = user_name.split('#')
@@ -37,7 +37,7 @@ class ServerManagement(commands.Cog):
                 return
 
     @commands.has_permissions(manage_messages=True)
-    @commands.command(name = "delete")
+    @commands.command(name = "delete", help = "메세지를 삭제합니다.", usage = "//delete 삭제하고 싶은 메세지 개수\nEx : //delete 100")
     async def delete_command(self, ctx, amount):
         await ctx.channel.purge(limit = int(amount))
         await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
