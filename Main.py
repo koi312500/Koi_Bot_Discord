@@ -1,6 +1,7 @@
 import asyncio
 import discord
 import os
+import datetime
 from discord.ext import commands
 import sys
 sys.path.insert(1, 'KoGPT2-chatbot')
@@ -18,7 +19,7 @@ def get_token(): # Get tokens from key.key
 async def on_ready():
     print("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
     game = discord.Game("Now updating Koi Bot")
-    await app.change_presence(status=discord.Status.idle, activity=game)
+    await app.change_presence(status=discord.Status.online, activity=game)
     kogpt2.Load_Model() #Load Kogpt2 Model
     print("Bot is started!")
 
@@ -73,12 +74,9 @@ async def help_command(ctx,func = None):
                     cmd = app.get_command("compile")
                     embed = discord.Embed(title=f"명령어 : {cmd}", description=cmd.help, color=0x00ffff)
                     embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-                    embed.add_field(name = "사용법",value = "아래의 사진을 참고해 주세요")
+                    embed.add_field(name = "사용법",value = "아래의 사진을 참고해 주세요.")
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/743278669665009694/759765708250546246/asdfasdf.PNG")
                     await ctx.send(embed=embed)
-                    await ctx.send("사용법")
-                    await ctx.send("https://cdn.discordapp.com/attachments/754711446402891776/759637086348771338/adsfsdf.PNG")
-                    await ctx.send("Ex")
-                    await ctx.send("https://cdn.discordapp.com/attachments/754711446402891776/759637088302923826/asdfasdf.PNG")
                     command_notfound = False
                 else:
                     for title in cog.get_commands():
@@ -105,16 +103,50 @@ async def help_command(ctx,func = None):
                 await ctx.send("그런 이름의 명령어나 카테고리는 없습니다.")
 
 @app.event
+async def on_command_error(ctx, error):
+    error_notfound = True
+    if isinstance(error, commands.CommandNotFound):
+        error_notfound = False
+        embed = discord.Embed(title = "그런 커맨드는 존재하지 않습니다.", description = "//help 로 어떤 명령어가 있는지 확인하실 수 있습니다.", color = 0xff0000)
+        await ctx.send(embed=embed)
+    if isinstance(error, commands.MissingRequiredArgument):
+        error_notfound = False
+        embed = discord.Embed(title = "인자가 입력되지 않았습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
+        await ctx.send(embed=embed)
+    if isinstance(error, commands.BadArgument):
+        error_notfound = False
+        embed = discord.Embed(title = "잘못된 인자가 입력되었습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
+        await ctx.send(embed=embed)
+    if isinstance(error, commands.BotMissingPermissions):
+        error_notfound = False
+        embed = discord.Embed(title = "봇이 이 명령어를 실행할 권한을 가지고 있지 않습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
+        await ctx.send(embed=embed)
+    if isinstance(error, commands.MissingPermissions):
+        error_notfound = False
+        embed = discord.Embed(title = f"이 명령어를 {ctx.author} 의 권한 부족으로 실행하지 못했습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
+        await ctx.send(embed=embed)
+    
+    if error_notfound == True:
+        embed = discord.Embed(title="Error Info", description="Koi_Bot Error Info", color=0xff0000)
+    embed.add_field(name="Error Info", value=f"```{error}```")
+    await ctx.send(embed=embed)
+
+cnt = 0
+
+@app.event
 async def on_message(message):
-    print(cog_list)
-    await app.process_commands(message)
+    global cnt
     if message.author.bot:
-        return None
+        if str(message.author) != "귀요미 마법사#4376":
+            return None
+    now = datetime.datetime.now()
+    nowDatetime = now.strftime('%H:%M:%S')
+    print(str(nowDatetime) + " - " + str(message.author) + " : " + str(message.content))
+    await app.process_commands(message)
     if message.content[:2] == "//":
         await message.channel.send("Now updating Koi_Bot. Be aware of data.")
-    if message.content[:4] == "코이야 ": #send Kogpt2's Chat_To_AI func's return value
-        await message.channel.send(kogpt2.Chat_To_AI(message.content[4:]))
-        print(message.content)
+    if str(message.author) == "귀요미 마법사#4376":
+        await message.channel.send("," + str(kogpt2.Chat_To_AI(message.content)))
     
 
 app.run(get_token())
