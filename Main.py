@@ -145,8 +145,8 @@ async def on_message(message):
     await app.process_commands(message)
     if message.content[:2] == "//":
         await message.channel.send("Now updating Koi_Bot. Be aware of data.")
-    if str(message.author) == "귀요미 마법사#4376":
-        await message.channel.send("," + str(kogpt2.Chat_To_AI(message.content)))
+    if message.content[:4] == "코이야 ":
+        await message.channel.send(str(kogpt2.Chat_To_AI(message.content)))
     
 
 app.run(get_token())
