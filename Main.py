@@ -18,7 +18,7 @@ def get_token(): # Get tokens from key.key
 @app.event # Statement changing
 async def on_ready():
     print("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
-    game = discord.Game("Now updating Koi Bot")
+    game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
     kogpt2.Load_Model() #Load Kogpt2 Model
     print("Bot is started!")
@@ -46,7 +46,7 @@ async def reload_commands(ctx, extension=None):
         for extension in cog_list:
             app.unload_extension(f"Cogs.{extension}")
             app.load_extension(f"Cogs.{extension}")
-            ctx.send(f"{extension} is reloaded successfully!")
+            await ctx.send(f"{extension} is reloaded successfully!")
         await ctx.send("All extension is reloaded successfully!")
     else:
         app.unload_extension(f"Cogs.{extension}")
@@ -135,9 +135,8 @@ cnt = 0
 
 @app.event
 async def on_message(message):
-    global cnt
     if message.author.bot:
-        if str(message.author) != "귀요미 마법사#4376":
+        if str(message.author) != "KOI_TEST#8688": #Calling from Koi_Bot_Client
             return None
     now = datetime.datetime.now()
     nowDatetime = now.strftime('%H:%M:%S')
@@ -146,7 +145,10 @@ async def on_message(message):
     if message.content[:2] == "//":
         await message.channel.send("Now updating Koi_Bot. Be aware of data.")
     if message.content[:4] == "코이야 ":
-        await message.channel.send(str(kogpt2.Chat_To_AI(message.content)))
+        if str(message.author) == "KOI_TEST#8688": #Calling from Koi_Bot_Client
+            await message.channel.send("호출어0 " + str(kogpt2.Chat_To_AI(message.content[4:])))
+        else:
+            await message.channel.send(str(kogpt2.Chat_To_AI(message.content[4:])))
     
 
 app.run(get_token())
