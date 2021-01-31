@@ -3,9 +3,6 @@ import discord
 import os
 import datetime
 from discord.ext import commands
-import sys
-sys.path.insert(1, 'KoGPT2-chatbot')
-import AI_talk as kogpt2
 
 cog_list = []
 app = commands.Bot(command_prefix = "//")
@@ -20,7 +17,6 @@ async def on_ready():
     print("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
     game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
-    kogpt2.Load_Model() #Load Kogpt2 Model
     print("Bot is started!")
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
@@ -131,24 +127,12 @@ async def on_command_error(ctx, error):
     embed.add_field(name="Error Info", value=f"```{error}```")
     await ctx.send(embed=embed)
 
-cnt = 0
-
 @app.event
 async def on_message(message):
     if message.author.bot:
-        if str(message.author) != "KOI_TEST#8688": #Calling from Koi_Bot_Client
-            return None
+        return None
     now = datetime.datetime.now()
     nowDatetime = now.strftime('%H:%M:%S')
-    print(str(nowDatetime) + " - " + str(message.author) + " : " + str(message.content))
-    await app.process_commands(message)
-    if message.content[:2] == "//":
-        await message.channel.send("Now updating Koi_Bot. Be aware of data.")
-    if message.content[:4] == "코이야 ":
-        if str(message.author) == "KOI_TEST#8688": #Calling from Koi_Bot_Client
-            await message.channel.send("호출어0 " + str(kogpt2.Chat_To_AI(message.content[4:])))
-        else:
-            await message.channel.send(str(kogpt2.Chat_To_AI(message.content[4:])))
-    
+    print(str(nowDatetime) + " - " + str(message.author) + " : " + str(message.content)) 
 
 app.run(get_token())
