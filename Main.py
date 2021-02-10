@@ -49,6 +49,7 @@ async def reload_commands(ctx, extension=None):
         app.load_extension(f"Cogs.{extension}")
         await ctx.send(f"{extension} is reloaded successfully!")
 
+
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):
     if func is None:
@@ -98,8 +99,10 @@ async def help_command(ctx,func = None):
             else:
                 await ctx.send("그런 이름의 명령어나 카테고리는 없습니다.")
 
+
 @app.event
 async def on_command_error(ctx, error):
+    print(error)
     error_notfound = True
     if isinstance(error, commands.CommandNotFound):
         error_notfound = False
@@ -109,6 +112,7 @@ async def on_command_error(ctx, error):
         error_notfound = False
         embed = discord.Embed(title = "인자가 입력되지 않았습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
         await ctx.send(embed=embed)
+        print(cnt)
     if isinstance(error, commands.BadArgument):
         error_notfound = False
         embed = discord.Embed(title = "잘못된 인자가 입력되었습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
@@ -124,11 +128,14 @@ async def on_command_error(ctx, error):
     
     if error_notfound == True:
         embed = discord.Embed(title="Error Info", description="Koi_Bot Error Info", color=0xff0000)
-    embed.add_field(name="Error Info", value=f"```{error}```")
-    await ctx.send(embed=embed)
+        embed.add_field(name="Error Info", value=f"```{error}```")
+        await ctx.send(embed=embed)
+
+
 
 @app.event
 async def on_message(message):
+    await client.process_commands(message)
     if message.author.bot:
         return None
     now = datetime.datetime.now()
