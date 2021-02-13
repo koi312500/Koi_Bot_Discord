@@ -8,7 +8,7 @@ class Compile(commands.Cog):
     def __init__(self, app):
         self.app = app
     
-    @commands.command(name = "compile", help = "코드를 컴파일 해드립니다.", usage = "https://cdn.discordapp.com/attachments/754711446402891776/759637086348771338/adsfsdf.PNG \n https://cdn.discordapp.com/attachments/754711446402891776/759637088302923826/asdfasdf.PNG") #Compile code in many language - v2
+    @commands.command(name = "compile", help = "코드를 컴파일 해드립니다. (개발중)", usage = "https://cdn.discordapp.com/attachments/754711446402891776/759637086348771338/adsfsdf.PNG \n https://cdn.discordapp.com/attachments/754711446402891776/759637088302923826/asdfasdf.PNG") #Compile code in many language - v2
     async def compile_command(self, ctx, *, command):
         languages = ["java", "python", "cpp", "c", "kotlin", "py"]
         lines = command.splitlines()

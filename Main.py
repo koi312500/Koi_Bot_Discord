@@ -112,7 +112,6 @@ async def on_command_error(ctx, error):
         error_notfound = False
         embed = discord.Embed(title = "인자가 입력되지 않았습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
         await ctx.send(embed=embed)
-        print(cnt)
     if isinstance(error, commands.BadArgument):
         error_notfound = False
         embed = discord.Embed(title = "잘못된 인자가 입력되었습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
@@ -125,6 +124,10 @@ async def on_command_error(ctx, error):
         error_notfound = False
         embed = discord.Embed(title = f"이 명령어를 {ctx.author} 의 권한 부족으로 실행하지 못했습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
         await ctx.send(embed=embed)
+    if isinstance(error, commands.NotOwner):
+        error_notfound = False
+        embed = discord.Embed(title = f"이 명령어는 개발중인 명령어이며, 관리자(AKMU_LOVE#4211) 만 실행할 수 있습니다.", color = 0xff0000)
+        await ctx.send(embed=embed)
     
     if error_notfound == True:
         embed = discord.Embed(title="Error Info", description="Koi_Bot Error Info", color=0xff0000)
@@ -135,7 +138,7 @@ async def on_command_error(ctx, error):
 
 @app.event
 async def on_message(message):
-    await client.process_commands(message)
+    await app.process_commands(message)
     if message.author.bot:
         return None
     now = datetime.datetime.now()
