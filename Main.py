@@ -27,28 +27,32 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
 @app.command(name="load")
 async def load_commands(ctx, extension):
     app.load_extension(f"Cogs.{extension}")
-    await ctx.send(f"{extension} is loaded successfully!")
+    await ctx.reply(f"{extension} is loaded successfully!", mention_author = False)
     cog_list.append(extension)
 
 @app.command(name="unload")
 async def unload_commands(ctx, extension):
     app.unload_extension(f"Cogs.{extension}")
-    await ctx.send(f"{extension} is unloaded successfully!")
+    await ctx.reply(f"{extension} is unloaded successfully!", mention_author = False)
     cog_list.remove(extension)
 
 @app.command(name="reload")
 async def reload_commands(ctx, extension=None):
     if extension is None:
-        for extension in cog_list:
+        cog_list_tmp = list(cog_list)
+        for extension in cog_list_tmp:
             app.unload_extension(f"Cogs.{extension}")
+            cog_list.remove(extension)
             app.load_extension(f"Cogs.{extension}")
-            await ctx.send(f"{extension} is reloaded successfully!")
-        await ctx.send("All extension is reloaded successfully!")
+            cog_list.append(extension)
+            await ctx.reply(f"{extension} is reloaded successfully!", mention_author = False)
+        await ctx.reply("All extension is reloaded successfully!", mention_author = False)
     else:
         app.unload_extension(f"Cogs.{extension}")
+        cog_list.remove(extension)
         app.load_extension(f"Cogs.{extension}")
-        await ctx.send(f"{extension} is reloaded successfully!")
-
+        cog_list.append(extension)
+        await ctx.reply(f"{extension} is reloaded successfully!", mention_author = False)
 
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):
@@ -58,8 +62,8 @@ async def help_command(ctx,func = None):
         for x in cog_list:
             cog_data = app.get_cog(x)
             command_list = cog_data.get_commands()
-            embed.add_field(name=x, value=" ".join([c.name for c in command_list]), inline=True) 
-        await ctx.send(embed=embed)
+            embed.add_field(name=x, value=" ".join([c.name for c in command_list]), inline=False) 
+        await ctx.reply(embed=embed, mention_author = False)
     else:
         command_notfound = True
         for _title, cog in app.cogs.items():
@@ -73,7 +77,7 @@ async def help_command(ctx,func = None):
                     embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
                     embed.add_field(name = "사용법",value = "아래의 사진을 참고해 주세요.")
                     embed.set_image(url="https://cdn.discordapp.com/attachments/743278669665009694/759765708250546246/asdfasdf.PNG")
-                    await ctx.send(embed=embed)
+                    await ctx.reply(embed=embed, mention_author = False)
                     command_notfound = False
                 else:
                     for title in cog.get_commands():
@@ -82,7 +86,7 @@ async def help_command(ctx,func = None):
                             embed = discord.Embed(title=f"명령어 : {cmd}", description=cmd.help, color=0x00ffff)
                             embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
                             embed.add_field(name="사용법", value=cmd.usage)
-                            await ctx.send(embed=embed)
+                            await ctx.reply(embed=embed, mention_author = False)
                             command_notfound = False
                             break
                         else:
@@ -94,45 +98,42 @@ async def help_command(ctx,func = None):
                 command_list = cog_data.get_commands()
                 embed = discord.Embed(title=f"Category : {cog_data.qualified_name}", description=cog_data.description, color=0x00ffff)
                 embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-                embed.add_field(name="Commands", value=", ".join([c.name for c in command_list]))
-                await ctx.send(embed=embed)
+                for c in command_list:
+                    cmd = app.get_command(c.name)
+                    embed.add_field(name=cmd.name, value=cmd.help, inline = False)
+                await ctx.reply(embed=embed, mention_author = False)
             else:
-                await ctx.send("그런 이름의 명령어나 카테고리는 없습니다.")
+                await ctx.reply("그런 이름의 명령어나 카테고리는 없습니다.", mention_author = False)
 
 
 @app.event
 async def on_command_error(ctx, error):
-    print(error)
+    print("Error is occurd! Error info : " + str(error))
     error_notfound = True
     if isinstance(error, commands.CommandNotFound):
         error_notfound = False
         embed = discord.Embed(title = "그런 커맨드는 존재하지 않습니다.", description = "//help 로 어떤 명령어가 있는지 확인하실 수 있습니다.", color = 0xff0000)
-        await ctx.send(embed=embed)
     if isinstance(error, commands.MissingRequiredArgument):
         error_notfound = False
         embed = discord.Embed(title = "인자가 입력되지 않았습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
-        await ctx.send(embed=embed)
     if isinstance(error, commands.BadArgument):
         error_notfound = False
         embed = discord.Embed(title = "잘못된 인자가 입력되었습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
-        await ctx.send(embed=embed)
     if isinstance(error, commands.BotMissingPermissions):
         error_notfound = False
         embed = discord.Embed(title = "봇이 이 명령어를 실행할 권한을 가지고 있지 않습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
-        await ctx.send(embed=embed)
     if isinstance(error, commands.MissingPermissions):
         error_notfound = False
         embed = discord.Embed(title = f"이 명령어를 {ctx.author} 의 권한 부족으로 실행하지 못했습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
-        await ctx.send(embed=embed)
     if isinstance(error, commands.NotOwner):
         error_notfound = False
         embed = discord.Embed(title = f"이 명령어는 개발중인 명령어이며, 관리자(AKMU_LOVE#4211) 만 실행할 수 있습니다.", color = 0xff0000)
-        await ctx.send(embed=embed)
     
     if error_notfound == True:
         embed = discord.Embed(title="Error Info", description="Koi_Bot Error Info", color=0xff0000)
         embed.add_field(name="Error Info", value=f"```{error}```")
-        await ctx.send(embed=embed)
+    
+    await ctx.reply(embed=embed, mention_author = False)
 
 
 

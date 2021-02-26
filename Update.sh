@@ -1,3 +1,4 @@
 sleep 20s
-git fetch origin master
-python Main.py
+git push origin master
+chmod 777 update.sh
+python Main.py &
