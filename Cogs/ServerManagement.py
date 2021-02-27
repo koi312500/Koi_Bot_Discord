@@ -11,18 +11,18 @@ class ServerManagement(commands.Cog):
     async def kick_command(self, ctx, user_name : discord.Member, *, reason = None):
         await user_name.kick(reason = reason)
         if(reason != None):
-            await ctx.reply(str(user_name) + "님이 추방되셨습니다." + "\n이유 : " + str(reason), user_mention = False)
+            await ctx.reply(str(user_name) + "님이 추방되셨습니다." + "\n이유 : " + str(reason), mention_author = False)
         else:
-            await ctx.reply(str(user_name) + "님이 추방되셨습니다.", user_mention = False)
+            await ctx.reply(str(user_name) + "님이 추방되셨습니다.", mention_author = False)
 
     @commands.has_permissions(ban_members = True)
     @commands.command(name = "ban", help = "멤버를 차단합니다.", usage = "//ban 대상(멘션)\nEx : //ban @AKMU_LOVE#4211")
     async def ban_command(self, ctx, user_name : discord.Member, *, reason = None):
         await user_name.ban(reason = reason)
         if(reason != None):
-            await ctx.reply(str(user_name) + "님이 차단되셨습니다." + "\n이유 : " + str(reason), user_mention = False)
+            await ctx.reply(str(user_name) + "님이 차단되셨습니다." + "\n이유 : " + str(reason), mention_author = False)
         else:
-            await ctx.reply(str(user_name) + "님이 차단되셨습니다.", user_mention = False)
+            await ctx.reply(str(user_name) + "님이 차단되셨습니다.", mention_author = False)
 
     @commands.has_permissions(ban_members = True)
     @commands.command(name = "unban", help = "멤버의 차단을 해제합니다.", usage = "//unban 대상(멘션 X)\nEx : //unban AKMU_LOVE#4211")
@@ -33,7 +33,7 @@ class ServerManagement(commands.Cog):
             user = ban_entry.user
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
-                await ctx.reply(f"{user.mention} 의 차단이 해제되셨습니다.", user_mention = False)
+                await ctx.reply(f"{user.mention} 의 차단이 해제되셨습니다.", mention_author = False)
                 return
 
     @commands.has_permissions(manage_messages=True)
