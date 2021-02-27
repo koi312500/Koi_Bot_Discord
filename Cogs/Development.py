@@ -16,7 +16,7 @@ class Development(commands.Cog):
             subprocess.call("start update.bat ",shell = True)
         elif str(platform.system()) == "Linux":
             await ctx.reply("Execution Platform is **Linux**, Request to start update.sh.")
-            subprocess.call("sudo update.sh &", shell = True)
+            subprocess.call("./update.sh &", shell = True)
         else:
             await ctx.reply("Cannot detect your Execution Platform. Cannot update your bot automatically.")
         await ctx.reply("Done. Exiting progress.")
