@@ -27,32 +27,35 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
 @app.command(name="load")
 async def load_commands(ctx, extension):
     app.load_extension(f"Cogs.{extension}")
-    await ctx.reply(f"{extension} is loaded successfully!", mention_author = False)
+    await ctx.reply(f"{extension} is loaded successfully!")
     cog_list.append(extension)
 
 @app.command(name="unload")
 async def unload_commands(ctx, extension):
     app.unload_extension(f"Cogs.{extension}")
-    await ctx.reply(f"{extension} is unloaded successfully!", mention_author = False)
+    await ctx.reply(f"{extension} is unloaded successfully!")
     cog_list.remove(extension)
 
 @app.command(name="reload")
 async def reload_commands(ctx, extension=None):
     if extension is None:
         cog_list_tmp = list(cog_list)
+        cnt = 0
+        msg = await ctx.reply(f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!")
         for extension in cog_list_tmp:
+            await msg.edit(content = f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!\nNow reloading {extension} extension!")
             app.unload_extension(f"Cogs.{extension}")
             cog_list.remove(extension)
             app.load_extension(f"Cogs.{extension}")
             cog_list.append(extension)
-            await ctx.reply(f"{extension} is reloaded successfully!", mention_author = False)
-        await ctx.reply("All extension is reloaded successfully!", mention_author = False)
+            cnt = cnt+1
+        await msg.edit(content = f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!\nAll extension reloaded successfully!")
     else:
         app.unload_extension(f"Cogs.{extension}")
         cog_list.remove(extension)
         app.load_extension(f"Cogs.{extension}")
         cog_list.append(extension)
-        await ctx.reply(f"{extension} is reloaded successfully!", mention_author = False)
+        await ctx.reply(f"{extension} is reloaded successfully!")
 
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):

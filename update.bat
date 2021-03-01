@@ -1,3 +1,3 @@
 timeout /t 20 
-git fetch origin master 
+git pull origin master 
 python Main.py 

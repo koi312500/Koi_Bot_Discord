@@ -12,20 +12,20 @@ class BotManagement(commands.Cog):
     @commands.command(name = "restart", help = "봇을 재부팅하고, 업데이트 코드를 확인합니다.", usage = "관리자용 커맨드입니다.")
     async def restart_command(self,ctx):
         if str(platform.system()) == "Windows":
-            await ctx.reply("Execution Platform is **Windows**, Request to start update.bat.", mention_author = False)
+            await ctx.reply("Execution Platform is **Windows**, Request to start update.bat.")
             subprocess.call("start update.bat ",shell = True)
         elif str(platform.system()) == "Linux":
-            await ctx.reply("Execution Platform is **Linux**, Request to start update.sh.", mention_author = False)
-            subprocess.call("sudo update.sh &", shell = True)
+            await ctx.reply("Execution Platform is **Linux**, Request to start update.sh.")
+            subprocess.call("./update.sh &", shell = True)
         else:
-            await ctx.reply("Cannot detect your Execution Platform. Cannot update your bot automatically.", mention_author = False)
-        await ctx.reply("Done. Exiting progress.", mention_author = False)
+            await ctx.reply("Cannot detect your Execution Platform. Cannot update your bot automatically.")
+        await ctx.reply("Done. Exiting progress.")
         exit()
 
     @commands.is_owner()
     @commands.command(name = "stop", help = "봇을 종료합니다.", usage = "관리자용 커맨드입니다.")
     async def stop_command(self, ctx):
-        await ctx.reply("Exiting Progress.", mention_author = False)
+        await ctx.reply("Exiting Progress.")
         exit()
    
     @commands.command(name = "invite", help = "Koi_Bot의 공식 서버 초대 링크를 보내드립니다.", usage = "//invite")

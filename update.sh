@@ -1,3 +1,3 @@
 sleep 20s
-git fetch origin master
+git pull origin master
 python Main.py
