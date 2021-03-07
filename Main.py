@@ -1,8 +1,11 @@
 import asyncio
 import discord
-import os
-import datetime
 from discord.ext import commands
+import os
+
+from Config import Config
+from Utils import Logger
+import datetime
 
 cog_list = []
 app = commands.Bot(command_prefix = "//")
@@ -14,10 +17,10 @@ def get_token(): # Get tokens from key.key
 
 @app.event # Statement changing
 async def on_ready():
-    print("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
+    Logger.info("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
     game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
-    print("Bot is started!")
+    Logger.info("Bot is started!")
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
     if filename.endswith(".py"):
@@ -50,7 +53,7 @@ async def reload_commands(ctx, extension=None):
             cog_list.append(extension)
             cnt = cnt+1
         await msg.edit(content = f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!\nAll extension reloaded successfully!")
-    else:
+    else: 
         app.unload_extension(f"Cogs.{extension}")
         cog_list.remove(extension)
         app.load_extension(f"Cogs.{extension}")
@@ -111,7 +114,7 @@ async def help_command(ctx,func = None):
 
 @app.event
 async def on_command_error(ctx, error):
-    print("Error is occurd! Error info : " + str(error))
+    Logger.err(error)
     error_notfound = True
     if isinstance(error, commands.CommandNotFound):
         error_notfound = False
@@ -145,8 +148,6 @@ async def on_message(message):
     await app.process_commands(message)
     if message.author.bot:
         return None
-    now = datetime.datetime.now()
-    nowDatetime = now.strftime('%H:%M:%S')
-    print(str(nowDatetime) + " - " + str(message.author) + " : " + str(message.content)) 
+    Logger.msg(message)
 
 app.run(get_token())

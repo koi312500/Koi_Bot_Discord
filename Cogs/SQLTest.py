@@ -1,7 +1,7 @@
 import sqlite3
 import discord
 from discord.ext import commands
-sql_db = sqlite3.connect("./User_data/test.db")
+sql_db = sqlite3.connect("Data/User_DB/test.db")
 db_cursor = sql_db.cursor()
 
 class SQLTest(commands.Cog):
