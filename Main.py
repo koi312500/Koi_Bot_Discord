@@ -66,6 +66,8 @@ async def help_command(ctx,func = None):
         embed = discord.Embed(title="Koi_Bot 도움말", description="명령 구문은 //`명령어` 입니다.", color=0x00ffff) 
         embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
         for x in cog_list:
+            if str(x) == "BotEvent":
+                continue
             cog_data = app.get_cog(x)
             command_list = cog_data.get_commands()
             embed.add_field(name=x, value=" ".join([c.name for c in command_list]), inline=False) 
@@ -111,43 +113,5 @@ async def help_command(ctx,func = None):
             else:
                 await ctx.reply("그런 이름의 명령어나 카테고리는 없습니다.", mention_author = False)
 
-
-@app.event
-async def on_command_error(ctx, error):
-    Logger.err(error)
-    error_notfound = True
-    if isinstance(error, commands.CommandNotFound):
-        error_notfound = False
-        embed = discord.Embed(title = "그런 커맨드는 존재하지 않습니다.", description = "//help 로 어떤 명령어가 있는지 확인하실 수 있습니다.", color = 0xff0000)
-    if isinstance(error, commands.MissingRequiredArgument):
-        error_notfound = False
-        embed = discord.Embed(title = "인자가 입력되지 않았습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
-    if isinstance(error, commands.BadArgument):
-        error_notfound = False
-        embed = discord.Embed(title = "잘못된 인자가 입력되었습니다.", description = f"`//help {ctx.command}` 로 {ctx.command} 명령어의 사용법을 확인하실 수 있습니다.", color = 0xff0000)
-    if isinstance(error, commands.BotMissingPermissions):
-        error_notfound = False
-        embed = discord.Embed(title = "봇이 이 명령어를 실행할 권한을 가지고 있지 않습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
-    if isinstance(error, commands.MissingPermissions):
-        error_notfound = False
-        embed = discord.Embed(title = f"이 명령어를 {ctx.author} 의 권한 부족으로 실행하지 못했습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
-    if isinstance(error, commands.NotOwner):
-        error_notfound = False
-        embed = discord.Embed(title = f"이 명령어는 개발중인 명령어이며, 관리자(AKMU_LOVE#4211) 만 실행할 수 있습니다.", color = 0xff0000)
-    
-    if error_notfound == True:
-        embed = discord.Embed(title="Error Info", description="Koi_Bot Error Info", color=0xff0000)
-        embed.add_field(name="Error Info", value=f"```{error}```")
-    
-    await ctx.reply(embed=embed, mention_author = False)
-
-
-
-@app.event
-async def on_message(message):
-    await app.process_commands(message)
-    if message.author.bot:
-        return None
-    Logger.msg(message)
 
 app.run(get_token())

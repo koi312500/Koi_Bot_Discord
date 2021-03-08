@@ -18,7 +18,7 @@ def msg(message):
     author = message.author
 
     if 'DM' in str(type(message.channel)):
-        log_msg = f"[Message/DM] <{author.name}> {message.content}"
+        log_msg = f"[Message/DM] <{str(author)}> {message.content}"
     else:
         guild = message.guild
         channel = message.channel
