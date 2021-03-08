@@ -12,9 +12,12 @@ class BotManagement(commands.Cog):
     def __init__(self, app):
         self.app = app
 
-    @commands.is_owner()
     @commands.command(name = "restart", help = "봇을 재부팅하고, 업데이트 코드를 확인합니다.", usage = "관리자용 커맨드입니다.")
     async def restart_command(self,ctx):
+        if ctx.author.id not in Config.admin_id:
+            embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
+            ctx.reply(embed = embed, mention_author = False)
+
         Logger.info("Restarting is requested.")
         if str(platform.system()) == "Windows":
             await ctx.reply("Execution platform is **Windows**, Request to start update.bat.")
@@ -32,9 +35,12 @@ class BotManagement(commands.Cog):
         await ctx.reply("Done. Exiting progress.")
         exit()
 
-    @commands.is_owner()
     @commands.command(name = "stop", help = "봇을 종료합니다.", usage = "관리자용 커맨드입니다.")
     async def stop_command(self, ctx):
+        if ctx.author.id not in Config.admin_id:
+            embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
+            ctx.reply(embed = embed, mention_author = False)
+
         Logger.info("Exiting progress.")
         await ctx.reply("Exiting progress.")
         exit()
