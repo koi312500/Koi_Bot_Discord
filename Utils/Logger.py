@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 import traceback
 
-import Config
+from Config import Config
 
 def err(error):
     log(f'[Error] {error}', True)

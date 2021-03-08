@@ -5,7 +5,7 @@ import subprocess
 import platform
 
 from Utils import Logger
-import Config
+from Config import Config
 
 class BotManagement(commands.Cog):
 
