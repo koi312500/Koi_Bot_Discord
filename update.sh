@@ -1,3 +1,4 @@
-sleep 20s
+sleep 20s 
 git pull origin master
-python Main.py
+rm output.out
+python Main.py > output.out &

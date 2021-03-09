@@ -1,3 +1,4 @@
 timeout /t 20 
 git pull origin master 
-python Main.py 
+rm output.out
+python Main.py > output.out &
