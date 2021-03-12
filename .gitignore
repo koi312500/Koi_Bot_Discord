@@ -135,6 +135,8 @@ dmypy.json
 # User
 .params
 .tmp_code
+.tmp
 
 #Data
-/User_data
+Data/
+Data/Logs
