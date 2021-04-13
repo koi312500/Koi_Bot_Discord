@@ -5,7 +5,6 @@ import os
 
 from Config import Config
 from Utils import Logger
-import datetime
 
 cog_list = []
 app = commands.Bot(command_prefix = "//")

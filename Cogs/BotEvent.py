@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 
 from Utils import Logger
-
+from Utils.UserClass import UserClass as User
 class BotEvent(commands.Cog):
     def __init__(self, app):
         self.app = app
@@ -11,6 +11,9 @@ class BotEvent(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return None
+
+        player = User(message.author)
+        player.add_exp(1)
         Logger.msg(message)
 
     @commands.Cog.listener()

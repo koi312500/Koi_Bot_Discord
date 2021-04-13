@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-import subprocess
-import platform
 
 from Config import Config
+from Utils import Logger
+from Utils.UserClass import UserClass as User
 class Development(commands.Cog):
 
     def __init__(self, app):
@@ -16,7 +16,9 @@ class Development(commands.Cog):
             await ctx.reply(embed = embed, mention_author = False)
             return
 
-        await ctx.reply("Hello, World!", mention_author = False)                                
+        player = User(ctx.author)
+        #player.money = int(value_tmp)
+        print(player.money)
 
 def setup(app):
     app.add_cog(Development(commands))
