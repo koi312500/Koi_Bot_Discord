@@ -11,6 +11,8 @@ class BotEvent(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return None
+        if message.content.startswith("//selfcheck"):
+            return None
 
         player = User(message.author)
         player.add_exp(1)
