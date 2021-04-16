@@ -19,4 +19,4 @@ class Music(commands.Cog):
         await voice_channel.disconnect()
 
 def setup(app):
-    app.add_cog(Music(commands))
+    app.add_cog(Music(app))

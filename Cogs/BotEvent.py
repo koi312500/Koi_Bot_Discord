@@ -1,11 +1,27 @@
 from discord.ext import commands
+from discord.ext import tasks
 import discord
+import asyncio
 
 from Utils import Logger
 from Utils.UserClass import UserClass as User
 class BotEvent(commands.Cog):
     def __init__(self, app):
         self.app = app
+        self.status_change.start()
+
+    @tasks.loop(seconds = 30)
+    async def status_change(self):
+        await asyncio.sleep(10)
+        game = discord.Game("//help to look commands list!")
+        await self.app.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(10)
+        game = discord.Game("Made by AKMU_LOVE#4211(KOI#4182)")
+        await self.app.change_presence(status=discord.Status.online, activity=game)
+        await asyncio.sleep(10)
+        game = discord.Game("Running at Galaxy S8+ with Termux and Pixel experience")
+        await self.app.change_presence(status=discord.Status.online, activity=game)
+
 
     @commands.Cog.listener()
     async def on_message(self, message):

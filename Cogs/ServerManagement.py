@@ -44,4 +44,4 @@ class ServerManagement(commands.Cog):
 
 
 def setup(app):
-    app.add_cog(ServerManagement(commands))
+    app.add_cog(ServerManagement(app))
