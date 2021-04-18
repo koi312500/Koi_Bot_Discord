@@ -1,7 +1,8 @@
-import datetime
-import os
 import discord
 from discord.ext import commands
+
+import datetime
+import os
 
 from Config import Config
 class Compile(commands.Cog):

@@ -1,11 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.ext import tasks
-import hcskr
-import pickle
-import time
-
-from hcskr.hcs import selfcheck
 
 from Config import Config
 from Utils import Logger
@@ -14,60 +8,6 @@ class Development(commands.Cog):
 
     def __init__(self, app):
         self.app = app
-        self.selfcheck_loop.start()
-
-    @tasks.loop(minutes = 5)
-    async def selfcheck_loop(self):
-        if str(time.localtime().tm_hour) == "4":
-            tmp = int(time.localtime().tm_min)
-            if 0 <= tmp and tmp < 10:
-                Logger.log("Auto Covid19 Selfcheck executed.")
-            else:
-                return None
-            with open("Data/selfcheck.dat", "rb") as selfcheck_data:
-                selfcheck_list = pickle.load(selfcheck_data)
-            for i in list(selfcheck_list.keys()):
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
-                dm_user = await self.app.fetch_user(int(i))
-                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
-                embed.set_footer(text=f"//selfcheck 명령어로 실행된 결과입니다.")
-                embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
-                embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
-                embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
-                await dm_user.send(embed=embed)
-
-
- 
-    @commands.command(name = "selfcheck", help = "자가진단을 해 주는 명령어에요! 자세한 설명은 //selfcheck 를 통해 확인하세요!", usage = "//selfcheck 를 통해 확인하세요!")
-    async def selfcheck_command(self, ctx, name = None, birth = None, region = None, school_name = None, school_type = None, password = None):
-        with open("Data/selfcheck.dat", "rb") as selfcheck_data:
-            selfcheck_list = pickle.load(selfcheck_data)
-        if name == None:
-            if str(ctx.author.id) not in selfcheck_list:
-                embed = discord.Embed(title=f"자가진단 정보 등록법", color=0x00ffff)
-                embed.set_footer(text=f"'hcskr' python 모듈을 사용중입니다.")
-                embed.add_field(name = "How to register", value = "//selfcheck 이름 생년월일(YYMMDD) 지역 학교이름 학교유형 비밀번호", inline = False)
-                embed.add_field(name = "Ex", value = "//selfcheck 홍길동 010101 서울 서울중 중학교 1111", inline = False)
-                embed.add_field(name = "Security", value = "사용자의 개인정보 보호를 위해, hcskr 모듈의 token 자가진단 함수를 사용중입니다.\nKoi_Bot 에서는, //selfcheck로 시작되는 모든 기록을 로깅하지 않습니다.", inline = False)
-                await ctx.author.send(embed=embed)    
-            else:
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
-                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
-                embed.set_footer(text=f"//selfcheck 명령어로 실행된 결과입니다.")
-                embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
-                embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
-                embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
-                await ctx.reply(embed=embed) 
-        
-        else:
-            if birth == None or region == None or school_name == None or school_type == None or password == None:
-                await ctx.author.send("무언가 빠졌어요! 다시 입력해주세요!")
-            else:
-                token_hcskr = await hcskr.asyncGenerateToken(str(name), str(birth), str(region), str(school_name), str(school_type), str(password))
-                selfcheck_list[str(ctx.author.id)] = token_hcskr
-                await ctx.reply(token_hcskr, mention_author = False)
-                with open("Data/selfcheck.dat", "wb") as selfcheck_data:
-                    pickle.dump(selfcheck_list, selfcheck_data)
 
     @commands.command(name = "test", help = "관리자용 커맨드입니다.", usage = "관리자용 커맨드입니다.")
     async def test_command(self, ctx, value_tmp):
@@ -76,11 +16,7 @@ class Development(commands.Cog):
             await ctx.reply(embed = embed, mention_author = False)
             return
 
-        player = User(ctx.author)
-        await ctx.reply(f"{str(ctx.author)} 님의 현재 잔고는 {player.money} 입니다.")
-        with open("Data/selfcheck.dat", "wb+") as f: # 파일을 만들기
-            selfcheck_list = dict()
-            pickle.dump(selfcheck_list, f)
+        ctx.reply("Hello, World!")
 
 def setup(app):
     app.add_cog(Development(app))

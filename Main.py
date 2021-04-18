@@ -1,6 +1,6 @@
-import asyncio
 import discord
 from discord.ext import commands
+
 import os
 
 from Config import Config
