@@ -51,7 +51,7 @@ class Tools(commands.Cog):
             else:
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
-                embed.set_footer(text=f"//selfcheck 명령어로 실행된 결과입니다.")
+                embed.set_footer(text=f"//selfcheck 명령어의 결과입니다.")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)

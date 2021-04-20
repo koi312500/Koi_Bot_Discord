@@ -1,29 +1,24 @@
-'''
-<User 클래스>
-- user를 통해 객체를 생성합니다.
-- user = User(author)처럼 사용합니다.
-- user = User(id)로도 쓸 수 있지만 기능이 제한됩니다.
-'''
+#Originated from Kimu-Nowchira's Setabot Framework
+#Edited by AKMU_LOVE#4211(KOI#4182)
+
 from typing import Union, Optional
 
 import discord
 
 from Utils.SetaSQLiteClass import SetaSQLiteClass as Seta_sqlite
-from Utils import LevelDesign
 
 db = Seta_sqlite('Data/User_DB/user.db') 
 
 
 class UserClass:
-    # 기본 정보 #
-    user: Optional[discord.User] = None  # 디스코드의 유저 객체
-    id: int = 0  # 유저 아이디
-    name: str = '알 수 없는 유저'  # 유저 이름
+    #Identification information
+    user: Optional[discord.User] = None 
+    id: int = 0  # User's ID
+    name: str = '알 수 없는 유저'  #User's nickname
 
-    # 게임용 변수 # (user.money += 4 같이 값을 직접 바꾸는 사용은 절대 금지! 함수를 쓰세요!)
-    _money: int = 0  # 보유한 돈
-    _exp: int = 0  # 경험치 (레벨은 경험치에 따라 자동 조정되며, 공격, 방어 등의 스탯은 레벨에 따라 자동 조정 됩니다.)
-    items: list = []  # 아이템 목록
+    #Do not edit variables with '+=', '-=', etc (This approach does not apply to SQL)
+    _permission: int = 0
+    _exp: int = 0 
 
     realname: Optional[str] = None
 
@@ -58,37 +53,21 @@ class UserClass:
 
         data = data[0]
         self.name = str(data[0])
-        self._money = int(data[1])
-        self._exp = int(data[2])
+        self._exp = int(data[1])
+        self._permission = int(data[2])
         return data
 
     def _load_data(self):
         return db.select_sql(
             'users',
-            'name, money, exp',
+            'name, exp, permission',
             f'WHERE id={self.id}'
             )
 
 # --------- Getter/Setter --------- #
-
-    @property
-    def money(self):
-        '''int: 유저의 돈'''
-        return db.select_sql('users', 'money', f'WHERE id={self.id}')[0][0]
-
-    @money.setter
-    def money(self, value: int):
-        db.update_sql('users', f'money={int(value)}', f'WHERE id={self.id}')
-        self._money = int(value)
-
-    def add_money(self, value: int):
-        '''유저의 돈을 value 만큼 더합니다. 유저의 돈을 늘리거나 줄일 때 add_money의 사용을 권장합니다.'''
-        db.update_sql('users', f'money=money+{int(value)}', f'WHERE id={self.id}')
-        self._money += int(value)
-
     @property
     def exp(self):
-        '''int: 유저의 경험치'''
+        '''int : 유저의 경험치'''
         return db.select_sql('users', 'exp', f'WHERE id={self.id}')[0][0]
 
     @exp.setter
@@ -101,12 +80,24 @@ class UserClass:
         db.update_sql('users', f'exp=exp+{int(value)}', f'WHERE id={self.id}')
         self._exp += int(value)
 
-# --------- 스테이터스 관련 --------- #
-
     @property
     def level(self):
-        '''int: 유저의 레벨'''
-        return LevelDesign.exp_to_level(self.exp)
+        '''int : 유저의 레벨'''
+        if self.exp < 0:
+            return 0
+        else:
+            return int(((self.exp/5)+(1/4))**0.5 + 0.5)
+
+    @property
+    def permission(self):
+        '''int : 유저의 권한'''
+        return db.select_sql('users', 'permission', f'WHERE id={self.id}')[0][0]
+
+    @permission.setter
+    def permission(self, value: int):
+        db.update_sql('users', f'permission={int(value)}', f'WHERE id={self.id}')
+        self._permission = int(value)
+
 
 class NotExistUser(Exception):
     def __init__(self):

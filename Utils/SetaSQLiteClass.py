@@ -1,15 +1,11 @@
-'''
-    <sqlite_class.py>
-    파이썬 초보자 분들의 SQLite DB 사용을 더욱 편리하게 만들어 드리는 모듈입니다.
-    디버그 모드가 켜져 있으면 쿼리 사용이 기록됩니다.
-    <예제>
-    from sqlite_class import Seta_sqlite
-    db = Seta_sqlite('database.py')
-    db.update_sql(...)
-    ※ 봇 개발 초심자라면 이 파일을 수정하지 않는 것을 추천드려요!
-    - 키뮤 제작(0127 버전)
-'''
+#Originated from Kimu-Nowchira's Setabot Framework
+#Edited by AKMU_LOVE#4211(KOI#4182)
 
+'''
+How to use this File
+from Utils.SetaSQLiteClass import SetaSQLiteClass as Seta_sqlite
+db = Seta_sqlite('database.py')
+'''
 import sqlite3
 from Utils import Logger
 
@@ -87,7 +83,6 @@ class SetaSQLiteClass:
         rt가 True이면 fetchall로 결과를 반환
         rt가 False이면 결과를 반환하지 않고 commit함.
         '''
-        print(qur)
         self.cur.execute(qur)
         if rt:
             return self.cur.fetchall()

@@ -3,7 +3,7 @@ from discord.ext import commands
 
 import os
 
-from Config import Config
+from Utils import Permission
 from Utils import Logger
 
 cog_list = []
@@ -28,10 +28,8 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
 
 @app.command(name="load")
 async def load_commands(ctx, extension):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     app.load_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is loaded successfully!")
@@ -39,10 +37,8 @@ async def load_commands(ctx, extension):
 
 @app.command(name="unload")
 async def unload_commands(ctx, extension):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     app.unload_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is unloaded successfully!")
@@ -50,10 +46,8 @@ async def unload_commands(ctx, extension):
 
 @app.command(name="reload")
 async def reload_commands(ctx, extension=None):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     if extension is None:
         cog_list_tmp = list(cog_list)

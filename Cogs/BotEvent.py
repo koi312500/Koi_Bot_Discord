@@ -5,7 +5,6 @@ import discord
 import asyncio
 
 from Utils import Logger
-from Utils.UserClass import UserClass as User
 
 class BotEvent(commands.Cog):
     def __init__(self, app):
@@ -32,8 +31,6 @@ class BotEvent(commands.Cog):
         if message.content.startswith("//selfcheck"):
             return None
 
-        player = User(message.author)
-        player.add_exp(1)
         Logger.msg(message)
 
     @commands.Cog.listener()
