@@ -25,6 +25,8 @@ class Tools(commands.Cog):
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
                 selfcheck_list = pickle.load(selfcheck_data)
             for i in list(selfcheck_list.keys()):
+                if str(selfcheck_list[str(i)]['error']) == "True":
+                    continue
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
                 dm_user = await self.app.fetch_user(int(i))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
@@ -57,7 +59,7 @@ class Tools(commands.Cog):
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
                 await ctx.reply(embed=embed) 
         
-        else:
+        elif str(name) != "all":
             if birth == None or region == None or school_name == None or school_type == None or password == None:
                 await ctx.author.send("무언가 빠졌어요! 다시 입력해주세요!")
             else:
@@ -66,6 +68,22 @@ class Tools(commands.Cog):
                 await ctx.reply(token_hcskr, mention_author = False)
                 with open("Data/selfcheck.dat", "wb") as selfcheck_data:
                     pickle.dump(selfcheck_list, selfcheck_data)
+        
+        else:
+            with open("Data/selfcheck.dat", "rb") as selfcheck_data:
+                selfcheck_list = pickle.load(selfcheck_data)
+            for i in list(selfcheck_list.keys()):
+                if str(selfcheck_list[str(i)]['error']) == "True":
+                    continue
+                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
+                dm_user = await self.app.fetch_user(int(i))
+                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
+                embed.set_footer(text=f"Auto COVID19 SelfCheck Executed by {str(ctx.author)}")
+                embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
+                embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
+                embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
+                embed.add_field(name = f"Executed by {str(ctx.author)}", value = "Maybe AutoSelfCheck would not be executed Automatically. (It was run manually.)", inline = False)
+                await dm_user.send(embed=embed)
 
 def setup(app):
     app.add_cog(Tools(app))
