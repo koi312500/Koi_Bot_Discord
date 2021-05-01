@@ -18,7 +18,7 @@ class Tools(commands.Cog):
     async def selfcheck_loop(self):
         if str(time.localtime().tm_hour) == "7":
             tmp = int(time.localtime().tm_min)
-            if 0 <= tmp and tmp < 10:
+            if 0 <= tmp and tmp < 5:
                 Logger.log("Auto Covid19 Selfcheck executed.")
             else:
                 return None
