@@ -70,6 +70,8 @@ async def reload_commands(ctx, extension=None):
 
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):
+    if await Permission.check_permission(ctx, 1):
+        return None
     if func is None:
         embed = discord.Embed(title="Koi_Bot 도움말", description="명령 구문은 //`명령어` 입니다.", color=0x00ffff) 
         embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")

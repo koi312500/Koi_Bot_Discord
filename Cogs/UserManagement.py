@@ -51,6 +51,8 @@ class UserManagement(commands.Cog):
 
     @commands.command(name = "user")
     async def myinfo_show_command(self, ctx, command_user : discord.User = None):
+        if await Permission.check_permission(ctx, 1):
+            return None
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
         if command_user == None:
             now_user = User(ctx.author)

@@ -46,12 +46,16 @@ class BotManagement(commands.Cog):
    
     @commands.command(name = "invite", help = "Koi_Bot의 공식 서버 초대 링크를 보내드립니다.", usage = "//invite")
     async def invite_server_command(self, ctx):
+        if await Permission.check_permission(ctx, 1):
+            return None
         await ctx.author.send("봇 서버 링크는 다음과 같습니다.")
         await ctx.author.send("https://discord.gg/sX2K7eGdzT")
         await ctx.reply("Koi_Bot의 공식 서버 초대 링크가 DM으로 전송되었습니다!", mention_author = False)
 
     @commands.command(name = "info", help = "Koi_Bot의 정보를 출력합니다.", usage = "//info")
     async def info_command(self,ctx):
+        if await Permission.check_permission(ctx, 1):
+            return None
         embed = discord.Embed(title=f"Koi_Bot Info", color=0x00ffff)
         embed.set_footer(text=f"현재 봇의 버전은 Alpha 1.1.0 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 AKMU_LOVE#4211에 의해 제작되었습니다.", inline = False)

@@ -7,6 +7,7 @@ import pickle
 import time
 
 from Utils import Logger
+from Utils import Permission
 
 class Tools(commands.Cog):
 
@@ -40,6 +41,8 @@ class Tools(commands.Cog):
  
     @commands.command(name = "selfcheck", help = "자가진단을 해 주는 명령어에요! 자세한 설명은 //selfcheck 를 통해 확인하세요!", usage = "//selfcheck 를 통해 확인하세요!")
     async def selfcheck_command(self, ctx, name = None, birth = None, region = None, school_name = None, school_type = None, password = None):
+        if await Permission.check_permission(ctx, 1):
+            return None
         with open("Data/selfcheck.dat", "rb") as selfcheck_data:
             selfcheck_list = pickle.load(selfcheck_data)
         if name == None:
