@@ -1,9 +1,11 @@
-import datetime
-import os
 import discord
 from discord.ext import commands
 
-from Config import Config
+import datetime
+import os
+
+from Utils import Permission
+
 class Compile(commands.Cog):
 
     def __init__(self, app):
@@ -11,10 +13,8 @@ class Compile(commands.Cog):
     
     @commands.command(name = "compile", help = "코드를 컴파일 해드립니다. (개발중)", usage = "https://cdn.discordapp.com/attachments/754711446402891776/759637086348771338/adsfsdf.PNG \n https://cdn.discordapp.com/attachments/754711446402891776/759637088302923826/asdfasdf.PNG") #Compile code in many language - v2
     async def compile_command(self, ctx, *, command):
-        if ctx.author.id not in Config.admin_id:
-            embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-            await ctx.reply(embed = embed, mention_author = False)
-            return
+        if await Permission.check_permission(ctx, 2):
+            return None
 
         languages = ["java", "python", "cpp", "c", "kotlin", "py"]
         lines = command.splitlines()

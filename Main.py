@@ -1,14 +1,10 @@
-import asyncio
 import discord
 from discord.ext import commands
 import os
-import sys
-
 from KoGPT2.train_torch import KoGPT2Chat
 
-from Config import Config
+from Utils import Permission
 from Utils import Logger
-import datetime
 
 cog_list = []
 app = commands.Bot(command_prefix = "//")
@@ -35,10 +31,8 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
 
 @app.command(name="load")
 async def load_commands(ctx, extension):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     app.load_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is loaded successfully!")
@@ -46,10 +40,8 @@ async def load_commands(ctx, extension):
 
 @app.command(name="unload")
 async def unload_commands(ctx, extension):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     app.unload_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is unloaded successfully!")
@@ -57,10 +49,8 @@ async def unload_commands(ctx, extension):
 
 @app.command(name="reload")
 async def reload_commands(ctx, extension=None):
-    if ctx.author.id not in Config.admin_id:
-        embed = discord.Embed(title = f"이 명령어는 관리자용/개발중인 명령어이며, Developer만 사용하실 수 있습니다.", color = 0xff0000)
-        await ctx.reply(embed = embed, mention_author = False)
-        return
+    if await Permission.check_permission(ctx, 3):
+        return None
 
     if extension is None:
         cog_list_tmp = list(cog_list)
@@ -83,6 +73,8 @@ async def reload_commands(ctx, extension=None):
 
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):
+    if await Permission.check_permission(ctx, 1):
+        return None
     if func is None:
         embed = discord.Embed(title="Koi_Bot 도움말", description="명령 구문은 //`명령어` 입니다.", color=0x00ffff) 
         embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")

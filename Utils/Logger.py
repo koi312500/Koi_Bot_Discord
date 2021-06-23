@@ -1,8 +1,8 @@
+#Originated from Kimu-Nowchira's Setabot Framework
+#Edited by AKMU_LOVE#4211(KOI#4182)
+
 from datetime import datetime
 import os
-import traceback
-
-from Config import Config
 
 def err(error):
     log(f'[Error] {error}', True)
