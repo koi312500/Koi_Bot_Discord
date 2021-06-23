@@ -2,9 +2,7 @@ from discord.ext import commands
 import discord
 import sys
 
-sys.path.insert(1, 'KoGPT2-chatbot')
-import AI_talk as kogpt2
-
+from KoGPT2.train_torch import KoGPT2Chat
 from Utils import Logger
 
 class BotEvent(commands.Cog):
@@ -14,10 +12,7 @@ class BotEvent(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.content[:4] == "코이야 ":
-            if str(message.author) == "KOI_TEST#8688": #Calling from Koi_Bot_Client
-                await message.channel.send("호출어0 " + str(kogpt2.Chat_To_AI(message.content[4:])))
-            else:
-                await message.channel.send(str(kogpt2.Chat_To_AI(message.content[4:])))
+            await message.channel.send(str(self.app.model.chat(message.content[4:])))
 
         if message.author.bot:
             return None

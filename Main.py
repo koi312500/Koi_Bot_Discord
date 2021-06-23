@@ -4,8 +4,7 @@ from discord.ext import commands
 import os
 import sys
 
-sys.path.insert(1, 'KoGPT2-chatbot')
-import AI_talk as kogpt2
+from KoGPT2.train_torch import KoGPT2Chat
 
 from Config import Config
 from Utils import Logger
@@ -24,7 +23,8 @@ async def on_ready():
     Logger.info("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
     game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
-    kogpt2.Load_Model() 
+    model = KoGPT2Chat.load_from_checkpoint("KoGPT2/model_-last.ckpt")
+    app.model = model
     Logger.info("KoGPT2's model is loaded succefully!")
     Logger.info("Bot is started!")
 
