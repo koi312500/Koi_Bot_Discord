@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-
 import os
+from KoGPT2.train_torch import KoGPT2Chat
 
 from Utils import Permission
 from Utils import Logger
@@ -19,6 +19,9 @@ async def on_ready():
     Logger.info("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
     game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
+    model = KoGPT2Chat.load_from_checkpoint("KoGPT2/model_-last.ckpt")
+    app.model = model
+    Logger.info("KoGPT2's model is loaded succefully!")
     Logger.info("Bot is started!")
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder

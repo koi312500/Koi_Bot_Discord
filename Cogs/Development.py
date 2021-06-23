@@ -1,10 +1,15 @@
 import discord
 import asyncio
 from discord.ext import commands
+import subprocess
+import platform
+import datetime
+import inspect
 
 from Utils import Permission
 from Utils import Logger
 from Utils.UserClass import UserClass as User
+
 class Development(commands.Cog):
 
     def __init__(self, app):
