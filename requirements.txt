@@ -1,0 +1,7 @@
+discord.py
+discord-py-slash-command
+hcskr
+pandas
+pytorch_lightning==1.2.10
+torch
+transformers==4.5.1

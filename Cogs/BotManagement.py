@@ -1,6 +1,9 @@
 import discord
 import asyncio
 from discord.ext import commands
+from discord.ext import tasks
+
+import time
 import subprocess
 import platform
 
@@ -11,6 +14,14 @@ class BotManagement(commands.Cog):
 
     def __init__(self, app):
         self.app = app
+        self.status_change.start()
+
+    @tasks.loop(seconds = 30)
+    async def status_change(self):
+        status_list = ["'//help' to check commands list!", "Made by KOI#4182(AKMU_LOVE#4211)"]
+        for i in range(0,2):
+            await asyncio.sleep(10)
+            await self.app.change_presence(status = discord.Status.online, activity = discord.Game(status_list[i]))
 
     @commands.command(name = "restart", help = "봇을 재부팅하고, 업데이트 코드를 확인합니다.", usage = "관리자용 커맨드입니다.")
     async def restart_command(self,ctx):

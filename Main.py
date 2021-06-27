@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from discord_slash import SlashCommand
+
 import os
 from KoGPT2.train_torch import KoGPT2Chat
 
@@ -8,6 +10,7 @@ from Utils import Logger
 
 cog_list = []
 app = commands.Bot(command_prefix = "//")
+slash = SlashCommand(app, sync_commands=True, sync_on_cog_reload=True)
 app.remove_command("help")
 
 def get_token(): # Get tokens from key.key
