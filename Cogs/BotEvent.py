@@ -12,8 +12,6 @@ class BotEvent(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return None
-        if message.content[:4] == "코이야 ":
-            await message.channel.send(str(self.app.model.chat(message.content[4:])))
         if message.content.startswith("//selfcheck"):
             return None
         Logger.msg(message)
