@@ -1,5 +1,5 @@
 #Originated from Kimu-Nowchira's Setabot Framework
-#Edited by AKMU_LOVE#4211(KOI#4182)
+#Edited by KOI#4182
 
 from datetime import datetime
 import os
@@ -8,8 +8,11 @@ def err(error):
     log(f'[Error] {error}', True)
     return error
 
-def info(msg: str):
-    log(f'[Info] {msg}')
+async def info(msg: str, app):
+    channel = app.get_channel(754711446402891776)
+    text = f'[Info] {msg}'
+    await channel.send(f'Koi_Bot Logging - {text}')
+    log(text)
 
 def msg(message):
     if message.content == "":

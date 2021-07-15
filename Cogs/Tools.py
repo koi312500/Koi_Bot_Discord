@@ -20,7 +20,7 @@ class Tools(commands.Cog):
         if str(time.localtime().tm_hour) == "7":
             tmp = int(time.localtime().tm_min)
             if 0 <= tmp and tmp < 5:
-                Logger.log("Auto Covid19 Selfcheck executed.")
+                await Logger.log("Auto Covid19 Selfcheck executed.", self.app)
             else:
                 return None
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
@@ -73,6 +73,7 @@ class Tools(commands.Cog):
                     pickle.dump(selfcheck_list, selfcheck_data)
         
         else:
+            await Logger.info(f"Covid19 Selfcheck executed by {str(ctx.author)}. (It was run manually.)", self.app)
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
                 selfcheck_list = pickle.load(selfcheck_data)
             for i in list(selfcheck_list.keys()):

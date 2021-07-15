@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+import asyncio
+
 from Utils import Permission
 class ServerManagement(commands.Cog):
 
@@ -49,7 +51,9 @@ class ServerManagement(commands.Cog):
         if await Permission.check_permission(ctx, 1):
             return None
         await ctx.channel.purge(limit = int(amount))
-        await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
+        message = await ctx.send(str(amount) + "개의 메세지를 지웠습니다.")
+        await asyncio.sleep(3)
+        await message.delete()
 
 
 def setup(app):

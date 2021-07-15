@@ -22,35 +22,55 @@ class BotManagement(commands.Cog):
         for i in range(0,2):
             await asyncio.sleep(10)
             await self.app.change_presence(status = discord.Status.online, activity = discord.Game(status_list[i]))
+    
+    @commands.command(name = "update_delay", help = "봇 개발을 위하여 일시적으로 서버를 1시간 중지하는 명령어입니다.", usage = "//update_delay")
+    async def update_delay_command(self, ctx):
+        if await Permission.check_permission(ctx, 3):
+            return None
+        await Logger.info("1H Server stop for update is requested.", self.app)
+        if str(platform.system()) == "Windows":
+            await ctx.reply("Execution platform is **Windows**. Update_delay system for **Windows** is deleted by owner. No action.")
+            await Logger.info("No action because execution platform is Windows.", self.app)
+        elif str(platform.system()) == "Linux":
+            await ctx.reply("Execution platform is **Linux**, Request to start update_delay.sh.")
+            subprocess.call("./update_delay.sh &", shell = True)
+            await Logger.info("Shell command './update_delay.sh &' is requested.", self.app)
+            await Logger.info("Exiting progress.", self.app)
+            await asyncio.sleep(3)
+            await ctx.reply("Done. Exiting progress.")
+            exit()
+        else:
+            Logger.info("Cannot detect execution platform. Cannot update automatically.",self.app)
+            await ctx.reply("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.app)
+        
 
-    @commands.command(name = "restart", help = "봇을 재부팅하고, 업데이트 코드를 확인합니다.", usage = "관리자용 커맨드입니다.")
+    @commands.command(name = "restart", help = "봇을 재부팅합니다.", usage = "//restart")
     async def restart_command(self,ctx):
         if await Permission.check_permission(ctx, 3):
             return None
           
-        Logger.info("Restarting is requested.")
+        await Logger.info("Restarting is requested.", self.app)
         if str(platform.system()) == "Windows":
-            await ctx.reply("Execution platform is **Windows**, Request to start update.bat.")
-            subprocess.call("start update.bat ",shell = True)
-            Logger.info("Shell command 'start update.bat' is requested.")
+            await ctx.reply("Execution platform is **Windows**. Reboot system for **Windows** is deleted by owner. No action.")
+            await Logger.info("No action because execution platform is Windows.", self.app)
         elif str(platform.system()) == "Linux":
-            await ctx.reply("Execution platform is **Linux**, Request to start update.sh.")
-            subprocess.call("./update.sh &", shell = True)
-            Logger.info("Shell command './update.sh &' is requested.")
+            await ctx.reply("Execution platform is **Linux**, Request to start restart.sh.")
+            subprocess.call("./restart.sh &", shell = True)
+            await Logger.info("Shell command './restart.sh &' is requested.", self.app)
+            await Logger.info("Exiting progress.", self.app)
+            await asyncio.sleep(3)
+            await ctx.reply("Done. Exiting progress.")
+            exit()
         else:
-            Logger.info("Cannot detect execution platform. Cannot update automatically.")
-            await ctx.reply("Cannot detect your execution platform. Cannot update your bot automatically.")
-        Logger.info("Exiting progress.")
-        await asyncio.sleep(3)
-        await ctx.reply("Done. Exiting progress.")
-        exit()
+            Logger.info("Cannot detect execution platform. Cannot update automatically.",self.app)
+            await ctx.reply("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.app)
 
-    @commands.command(name = "stop", help = "봇을 종료합니다.", usage = "관리자용 커맨드입니다.")
+    @commands.command(name = "stop", help = "봇을 종료합니다.", usage = "//stop")
     async def stop_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
           
-        Logger.info("Exiting progress.")
+        await Logger.info("Exiting progress.", self.app)
         await ctx.reply("Exiting progress.")
         exit()
    
@@ -69,7 +89,7 @@ class BotManagement(commands.Cog):
             return None
           
         embed = discord.Embed(title=f"Koi_Bot Info", color=0x00ffff)
-        embed.set_footer(text=f"현재 봇의 버전은 Alpha 1.1.0 입니다.")
+        embed.set_footer(text=f"현재 봇의 버전은 Alpha 1.2.0 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 AKMU_LOVE#4211에 의해 제작되었습니다.", inline = False)
         embed.add_field(name = "License", value = "이 봇은 MIT License를 따르고 있습니다.", inline = False)
         embed.add_field(name = "Execution Environment1", value = "이 봇은 Galaxy S8+ with Termux and Pixel experience로 동작중입니다. (24h Server)", inline = False)

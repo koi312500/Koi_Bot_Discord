@@ -18,10 +18,10 @@ def get_token(): # Get tokens from key.key
 
 @app.event # Statement changing
 async def on_ready():
-    Logger.info("Logining to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")")
+    await Logger.info("Login to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")", app)
     game = discord.Game("Running.........")
     await app.change_presence(status=discord.Status.online, activity=game)
-    Logger.info("Bot is started!")
+    await Logger.info("Bot is started!", app)
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
     if filename.endswith(".py"):

@@ -18,11 +18,11 @@ class BotEvent(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        Logger.info(f"Entered to '{guild.name}' Server.")
+        Logger.info(f"Entered to '{guild.name}' Server.", self.app)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        Logger.info(f"Kicked from '{guild.name}' Server.")
+        Logger.info(f"Kicked from '{guild.name}' Server.", self.app)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
