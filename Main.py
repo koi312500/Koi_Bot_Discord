@@ -36,6 +36,7 @@ async def load_commands(ctx, extension):
     app.load_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is loaded successfully!")
     cog_list.append(extension)
+    await Logger.info(f"Extension {extension} is loaded.", app)
 
 @app.command(name="unload")
 async def unload_commands(ctx, extension):
@@ -45,6 +46,7 @@ async def unload_commands(ctx, extension):
     app.unload_extension(f"Cogs.{extension}")
     await ctx.reply(f"{extension} is unloaded successfully!")
     cog_list.remove(extension)
+    await Logger.info(f"Extension {extension} is unloaded.", app)
 
 @app.command(name="reload")
 async def reload_commands(ctx, extension=None):
@@ -54,21 +56,21 @@ async def reload_commands(ctx, extension=None):
     if extension is None:
         cog_list_tmp = list(cog_list)
         cnt = 0
-        msg = await ctx.reply(f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!")
+        msg = await ctx.reply(f"Reloading all extensions...")
         for extension in cog_list_tmp:
-            await msg.edit(content = f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!\nNow reloading {extension} extension!")
             app.unload_extension(f"Cogs.{extension}")
             cog_list.remove(extension)
             app.load_extension(f"Cogs.{extension}")
             cog_list.append(extension)
-            cnt = cnt+1
-        await msg.edit(content = f"Reloading Extension... {cnt}/{len(cog_list)} Reloaded!\nAll extension reloaded successfully!")
+        await msg.edit(content = f"All extensions are reloaded completely!")
+        await Logger.info("All Extensions are reloaded.", app)
     else: 
         app.unload_extension(f"Cogs.{extension}")
         cog_list.remove(extension)
         app.load_extension(f"Cogs.{extension}")
         cog_list.append(extension)
         await ctx.reply(f"{extension} is reloaded successfully!")
+        await Logger.info(f"Extension {extension} is reloaded.", app)
 
 @app.command(name = "help") # Help command
 async def help_command(ctx,func = None):

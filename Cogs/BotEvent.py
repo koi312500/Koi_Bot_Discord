@@ -1,5 +1,4 @@
 from discord.ext import commands
-from discord.ext import tasks
 import discord
 
 from Utils import Logger
@@ -14,7 +13,8 @@ class BotEvent(commands.Cog):
             return None
         if message.content.startswith("//selfcheck"):
             return None
-        Logger.msg(message)
+        if message.content.startswith("//"):
+            Logger.msg(message)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -23,6 +23,14 @@ class BotEvent(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         Logger.info(f"Kicked from '{guild.name}' Server.", self.app)
+
+    @commands.Cog.listener()
+    async def on_slash_command_error(self, ctx, error):
+        if isinstance(error, discord.errors.Forbidden):
+            embed = discord.Embed(title = "봇이 이 명령어를 실행할 권한을 가지고 있지 않습니다.", description = "관리자에게 권한 추가를 요청해 보세요.", color = 0xff0000)
+            await ctx.send(embed = embed)
+        else:
+            await ctx.send(str(error))
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

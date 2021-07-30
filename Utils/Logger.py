@@ -9,7 +9,7 @@ def err(error):
     return error
 
 async def info(msg: str, app):
-    channel = app.get_channel(754711446402891776)
+    channel = app.get_channel(865999145600286741)
     text = f'[Info] {msg}'
     await channel.send(f'Koi_Bot Logging - {text}')
     log(text)
