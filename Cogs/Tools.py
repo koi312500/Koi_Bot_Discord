@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord.ext import commands
 from discord.ext import tasks
@@ -20,7 +21,7 @@ class Tools(commands.Cog):
         if str(time.localtime().tm_hour) == "7":
             tmp = int(time.localtime().tm_min)
             if 0 <= tmp and tmp < 5:
-                await Logger.log("Auto Covid19 Selfcheck executed.", self.app)
+                await Logger.info("Auto Covid19 Selfcheck executed.", self.app)
             else:
                 return None
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
@@ -31,7 +32,7 @@ class Tools(commands.Cog):
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
                 dm_user = await self.app.fetch_user(int(i))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
-                embed.set_footer(text=f"AM 07:00 ~ AM 07:10 Auto COVID19 SelfCheck")
+                embed.set_footer(text=f"AM 07:00 ~ AM 07:05 Auto COVID19 SelfCheck")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
@@ -54,7 +55,8 @@ class Tools(commands.Cog):
                 embed.add_field(name = "Security", value = "사용자의 개인정보 보호를 위해, hcskr 모듈의 token 자가진단 함수를 사용중입니다.\nKoi_Bot 에서는, //selfcheck로 시작되는 모든 기록을 로깅하지 않습니다.", inline = False)
                 await ctx.author.send(embed=embed)    
             else:
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
+                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#0590')
+                print(result)
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
                 embed.set_footer(text=f"//selfcheck 명령어의 결과입니다.")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
