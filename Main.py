@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord_slash import SlashCommand
+from discord.commands import permissions
 
 import os
 
@@ -8,124 +8,75 @@ from Utils import Permission
 from Utils import Logger
 
 cog_list = []
-app = commands.Bot(command_prefix = "//")
-slash = SlashCommand(app, sync_commands=True, sync_on_cog_reload=True)
-app.remove_command("help")
+bot = discord.Bot()
 
 def get_token(): # Get tokens from key.key
     with open("Key.key", "r") as f:
         return f.readline().strip()
 
-@app.event # Statement changing
+@bot.event # Statement changing
 async def on_ready():
-    await Logger.info("Login to : " + str(app.user.name) + "(code : " + str(app.user.id) + ")", app)
+    await Logger.info("Login to : " + str(bot.user.name) + "(code : " + str(bot.user.id) + ")", bot)
     game = discord.Game("Running.........")
-    await app.change_presence(status=discord.Status.online, activity=game)
-    await Logger.info("Bot is started!", app)
+    await bot.change_presence(status=discord.Status.online, activity=game)
+    await Logger.info("Bot is started!", bot)
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
     if filename.endswith(".py"):
-        app.load_extension(f"Cogs.{filename[:-3]}")
+        bot.load_extension(f"Cogs.{filename[:-3]}")
         cog_list.append(filename[:-3])
 
-@app.command(name="load")
+@bot.slash_command(name="load", guild_ids = [742201063972667487])
+@permissions.has_any_role("Owner")
 async def load_commands(ctx, extension):
     if await Permission.check_permission(ctx, 3):
         return None
-
-    app.load_extension(f"Cogs.{extension}")
-    await ctx.reply(f"{extension} is loaded successfully!")
+    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
+    return None
+    
+    bot.load_extension(f"Cogs.{extension}")
+    await ctx.respond(f"{extension} is loaded successfully!")
     cog_list.append(extension)
-    await Logger.info(f"Extension {extension} is loaded.", app)
+    await Logger.info(f"Extension {extension} is loaded.", bot)
 
-@app.command(name="unload")
+@bot.slash_command(name="unload", guild_ids = [742201063972667487])
+@permissions.has_any_role("Owner")
 async def unload_commands(ctx, extension):
     if await Permission.check_permission(ctx, 3):
         return None
+    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
+    return None
 
-    app.unload_extension(f"Cogs.{extension}")
-    await ctx.reply(f"{extension} is unloaded successfully!")
+    bot.unload_extension(f"Cogs.{extension}")
+    await ctx.respond(f"{extension} is unloaded successfully!")
     cog_list.remove(extension)
-    await Logger.info(f"Extension {extension} is unloaded.", app)
+    await Logger.info(f"Extension {extension} is unloaded.", bot)
 
-@app.command(name="reload")
+@bot.slash_command(name="reload", guild_ids = [742201063972667487])
+@permissions.has_any_role("Owner")
 async def reload_commands(ctx, extension=None):
     if await Permission.check_permission(ctx, 3):
         return None
+    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
+    return None
 
     if extension is None:
         cog_list_tmp = list(cog_list)
-        cnt = 0
-        msg = await ctx.reply(f"Reloading all extensions...")
+        msg = await ctx.respond(f"Reloading all extensions...")
         for extension in cog_list_tmp:
-            app.unload_extension(f"Cogs.{extension}")
+            bot.unload_extension(f"Cogs.{extension}")
             cog_list.remove(extension)
-            app.load_extension(f"Cogs.{extension}")
+            bot.load_extension(f"Cogs.{extension}")
             cog_list.append(extension)
-        await msg.edit(content = f"All extensions are reloaded completely!")
-        await Logger.info("All Extensions are reloaded.", app)
+        await msg.edit_original_message(content = f"All extensions are reloaded completely!")
+        await Logger.info("All Extensions are reloaded.", bot)
     else: 
-        app.unload_extension(f"Cogs.{extension}")
+        bot.unload_extension(f"Cogs.{extension}")
         cog_list.remove(extension)
-        app.load_extension(f"Cogs.{extension}")
+        bot.load_extension(f"Cogs.{extension}")
         cog_list.append(extension)
-        await ctx.reply(f"{extension} is reloaded successfully!")
-        await Logger.info(f"Extension {extension} is reloaded.", app)
-
-@app.command(name = "help") # Help command
-async def help_command(ctx,func = None):
-    if await Permission.check_permission(ctx, 1):
-        return None
-    if func is None:
-        embed = discord.Embed(title="Koi_Bot 도움말", description="명령 구문은 //`명령어` 입니다.", color=0x00ffff) 
-        embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-        for x in cog_list:
-            if str(x) == "BotEvent":
-                continue
-            cog_data = app.get_cog(x)
-            command_list = cog_data.get_commands()
-            embed.add_field(name=x, value=" ".join([c.name for c in command_list]), inline=False) 
-        await ctx.reply(embed=embed, mention_author = False)
-    else:
-        command_notfound = True
-        for _title, cog in app.cogs.items():
-            if not command_notfound:
-                break
-
-            else:
-                if func == "compile": # Process compile command
-                    cmd = app.get_command("compile")
-                    embed = discord.Embed(title=f"명령어 : {cmd}", description=cmd.help, color=0x00ffff)
-                    embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-                    embed.add_field(name = "사용법",value = "아래의 사진을 참고해 주세요.")
-                    embed.set_image(url="https://cdn.discordapp.com/attachments/743278669665009694/759765708250546246/asdfasdf.PNG")
-                    await ctx.reply(embed=embed, mention_author = False)
-                    command_notfound = False
-                else:
-                    for title in cog.get_commands():
-                        if title.name == func:
-                            cmd = app.get_command(title.name)
-                            embed = discord.Embed(title=f"명령어 : {cmd}", description=cmd.help, color=0x00ffff)
-                            embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-                            embed.add_field(name="사용법", value=cmd.usage)
-                            await ctx.reply(embed=embed, mention_author = False)
-                            command_notfound = False
-                            break
-                        else:
-                            command_notfound = True
-        
-        if command_notfound:
-            if func in cog_list:
-                cog_data = app.get_cog(func)
-                command_list = cog_data.get_commands()
-                embed = discord.Embed(title=f"Category : {cog_data.qualified_name}", description=cog_data.description, color=0x00ffff)
-                embed.set_footer(text="//help `명령어`로 특정 명령어의 자세한 설명을 보실 수 있습니다!")
-                for c in command_list:
-                    cmd = app.get_command(c.name)
-                    embed.add_field(name=cmd.name, value=cmd.help, inline = False)
-                await ctx.reply(embed=embed, mention_author = False)
-            else:
-                await ctx.reply("그런 이름의 명령어나 카테고리는 없습니다.", mention_author = False)
+        await ctx.respond(f"{extension} is reloaded successfully!")
+        await Logger.info(f"Extension {extension} is reloaded.", bot)
 
 
-app.run(get_token())
+bot.run(get_token())
