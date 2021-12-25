@@ -20,7 +20,7 @@ class BotManagement(commands.Cog):
 
     @tasks.loop(seconds = 30)
     async def status_change(self):
-        status_list = ["Made by KOI#4182. (Alpha v_1)", "Changing Library from dpy to pycord. (Alpha v_1)"]
+        status_list = ["Made by KOI#4182. (Alpha v_2)", "Changing Library from dpy to pycord. (Alpha v_2)"]
         for i in status_list:
             await asyncio.sleep(15)
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))
@@ -94,9 +94,9 @@ class BotManagement(commands.Cog):
             return None
           
         embed = discord.Embed(title=f"Koi_Bot Info", color=0x00ffff)
-        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_1 입니다.")
+        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_2 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 KOI#4182 에 의해 제작되었습니다.", inline = False)
-        embed.add_field(name = "License", value = "이 봇은 GPL-3.0 라이센스를 따르고 있습니다.", inline = False)
+        embed.add_field(name = "License", value = "이 봇은 MIT 라이센스를 따르고 있습니다.", inline = False)
         embed.add_field(name = "Execution Environment1", value = "이 봇은 Galaxy S8+ with Termux and Pixel experience로 동작중입니다. (24h Server)", inline = False)
         embed.add_field(name = "Execution Environment2", value = "이 봇은 Samsung Galaxy Book Ion 2 에서 동작중입니다. (Developing Server)", inline = False)
         embed.add_field(name = "Helper_Slack bot", value = "Koi_Bot이 Slack Bot인 시절에 도와주신 bright_minary님, name10님, hotmandu님에게 감사드립니다.", inline = False)
