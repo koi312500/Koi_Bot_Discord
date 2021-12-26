@@ -27,7 +27,7 @@ class Tools(commands.Cog):
                     continue
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
                 dm_user = await self.app.fetch_user(int(i))
-                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
+                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
                 embed.set_footer(text=f"AM 06:00 ~ AM 07:00 Auto COVID19 SelfCheck")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
@@ -44,15 +44,15 @@ class Tools(commands.Cog):
             selfcheck_list = pickle.load(selfcheck_data)
         if name == None:
             if str(ctx.author.id) not in selfcheck_list:
-                embed = discord.Embed(title=f"자가진단 정보 등록법", color=0x00ffff)
+                embed = discord.Embed(title=f"자가진단 정보 등록법", color=0x0AB1C2)
                 embed.set_footer(text=f"'hcskr' python 모듈을 사용중입니다.")
                 embed.add_field(name = "How to register", value = "//selfcheck 이름 생년월일(YYMMDD) 지역 학교이름 학교유형 비밀번호", inline = False)
                 embed.add_field(name = "Ex", value = "//selfcheck 홍길동 010101 서울 서울중 중학교 1111", inline = False)
                 embed.add_field(name = "Security", value = "사용자의 개인정보 보호를 위해, hcskr 모듈의 token 자가진단 함수를 사용중입니다.\nKoi_Bot 에서는, //selfcheck로 시작되는 모든 기록을 로깅하지 않습니다.", inline = False)
                 await ctx.respond(embed=embed)    
             else:
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#4999')
-                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
+                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']))
+                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
                 embed.set_footer(text=f"//selfcheck 명령어의 결과입니다.")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
@@ -76,9 +76,9 @@ class Tools(commands.Cog):
             for i in list(selfcheck_list.keys()):
                 if str(selfcheck_list[str(i)]['error']) == "True":
                     continue
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#4999')
+                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']))
                 dm_user = await self.app.fetch_user(int(i))
-                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x00ffff)
+                embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
                 embed.set_footer(text=f"Auto COVID19 SelfCheck Executed by {str(ctx.author)}")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)

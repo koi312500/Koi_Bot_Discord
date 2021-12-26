@@ -20,7 +20,7 @@ class BotManagement(commands.Cog):
 
     @tasks.loop(seconds = 30)
     async def status_change(self):
-        status_list = ["Made by KOI#4182. (Alpha v_2)", "Changing Library from dpy to pycord. (Alpha v_2)"]
+        status_list = ["Made by KOI#4182. (Alpha v_3)", "`/invite` to join KOI Server!"]
         for i in status_list:
             await asyncio.sleep(15)
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))
@@ -84,17 +84,15 @@ class BotManagement(commands.Cog):
         if await Permission.check_permission(ctx, 1):
             return None
 
-        await ctx.author.send("봇 서버 링크는 다음과 같습니다.")
-        await ctx.author.send("https://discord.gg/sX2K7eGdzT")
-        await ctx.respond("Koi_Bot의 공식 서버 초대 링크가 DM으로 전송되었습니다!")
+        await ctx.respond("'Koi_Bot#4999'의 초대 링크 : https://discord.com/oauth2/authorize?client_id=905845362344996874&scope=bot%20applications.commands\n'Hello, Discord!' 서버(코이 서버)의 초대링크 : https://discord.gg/sX2K7eGdzT", ephemeral = True)
 
     @slash_command(name = "info")
     async def info_command(self,ctx):
         if await Permission.check_permission(ctx, 1):
             return None
           
-        embed = discord.Embed(title=f"Koi_Bot Info", color=0x00ffff)
-        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_2 입니다.")
+        embed = discord.Embed(title=f"Koi_Bot Info", color=0x0AB1C2)
+        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_3 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 KOI#4182 에 의해 제작되었습니다.", inline = False)
         embed.add_field(name = "License", value = "이 봇은 MIT 라이센스를 따르고 있습니다.", inline = False)
         embed.add_field(name = "Execution Environment1", value = "이 봇은 Galaxy S8+ with Termux and Pixel experience로 동작중입니다. (24h Server)", inline = False)
