@@ -19,13 +19,14 @@ class Tools(commands.Cog):
 
     @tasks.loop(hours = 1)
     async def selfcheck_loop(self):
+        print(time.localtime().tm_hour)
         if str(time.localtime().tm_hour) == "6":
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
                 selfcheck_list = pickle.load(selfcheck_data)
             for i in list(selfcheck_list.keys()):
                 if str(selfcheck_list[str(i)]['error']) == "True":
                     continue
-                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']), customloginname = 'SelfCheck Executed by Koi_Bot#7938')
+                result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']))
                 dm_user = await self.app.fetch_user(int(i))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
                 embed.set_footer(text=f"AM 06:00 ~ AM 07:00 Auto COVID19 SelfCheck")
@@ -33,6 +34,7 @@ class Tools(commands.Cog):
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
                 await dm_user.send(embed=embed)
+            await Logger.info("Auto Covid19 Selfcheck executed.", self.app)    
 
 
  
