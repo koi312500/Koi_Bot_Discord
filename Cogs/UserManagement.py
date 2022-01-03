@@ -17,7 +17,7 @@ class UserManagement(commands.Cog):
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
         now_user = User(ctx.author)
         embed = discord.Embed(title=f"Koi_Bot 약관", color=0x0AB1C2)
-        embed.set_footer(text="Sented by Koi_Bot#4999ㆍAcceptTerm Command's Result")
+        embed.set_footer(text="Sented by Koi_Bot#4999ㆍaccept_term Command's Result")
         embed.add_field(name = "Term1", value = "Koi_Bot#4999을 사용하시면서, 발생하는 모든 메세지 기록이 특별한 명시 없이 저장되는 것이 허용됩니다.", inline = False)
         embed.add_field(name = "Term2", value = "Koi_Bot#4999에 당신의 Discord Nickname, ID가 제공됩니다.", inline = False)
         embed.add_field(name = "Result", value = f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.", inline = False)
@@ -69,7 +69,7 @@ class UserManagement(commands.Cog):
         else:
             now_user = User(command_user)
         embed = discord.Embed(title=f"{str(now_user.name)} 님의 Koi_Bot Info", color=0x0AB1C2)
-        embed.set_footer(text="//user 명령어의 결과입니다.")
+        embed.set_footer(text = "Sented by Koi_Bot#4999ㆍuser Command's Result")
         embed.add_field(name = "현재 레벨", value = f"{now_user.level}레벨, {now_user.exp} exp를 가지고 있어요! ", inline = False)
         embed.add_field(name = "Permission", value = f"현재 권한 등급 : {str(permission_message[int(now_user.permission)])}")
         await ctx.respond(embed=embed)  

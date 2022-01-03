@@ -19,7 +19,7 @@ class Tools(commands.Cog):
 
     @tasks.loop(hours = 1)
     async def selfcheck_loop(self):
-        print(time.localtime().tm_hour)
+        await self.app.wait_until_ready()
         if str(time.localtime().tm_hour) == "6":
             with open("Data/selfcheck.dat", "rb") as selfcheck_data:
                 selfcheck_list = pickle.load(selfcheck_data)
@@ -29,7 +29,7 @@ class Tools(commands.Cog):
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']))
                 dm_user = await self.app.fetch_user(int(i))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
-                embed.set_footer(text=f"AM 06:00 ~ AM 07:00 Auto COVID19 SelfCheck")
+                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAM 06:00 ~ AM 07:00 Auto COVID19 SelfCheck")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
@@ -38,7 +38,7 @@ class Tools(commands.Cog):
 
 
  
-    @slash_command(name = "selfcheck", help = "자가진단을 해 주는 명령어에요! 자세한 설명은 //selfcheck 를 통해 확인하세요!", usage = "//selfcheck 를 통해 확인하세요!", guild_ids = [742201063972667487])
+    @slash_command(name = "selfcheck", guild_ids = [742201063972667487])
     async def selfcheck_command(self, ctx, name = None, birth = None, region = None, school_name = None, school_type = None, password = None):
         if await Permission.check_permission(ctx, 1):
             return None
@@ -47,15 +47,15 @@ class Tools(commands.Cog):
         if name == None:
             if str(ctx.author.id) not in selfcheck_list:
                 embed = discord.Embed(title=f"자가진단 정보 등록법", color=0x0AB1C2)
-                embed.set_footer(text=f"'hcskr' python 모듈을 사용중입니다.")
-                embed.add_field(name = "How to register", value = "//selfcheck 이름 생년월일(YYMMDD) 지역 학교이름 학교유형 비밀번호", inline = False)
-                embed.add_field(name = "Ex", value = "//selfcheck 홍길동 010101 서울 서울중 중학교 1111", inline = False)
-                embed.add_field(name = "Security", value = "사용자의 개인정보 보호를 위해, hcskr 모듈의 token 자가진단 함수를 사용중입니다.\nKoi_Bot 에서는, //selfcheck로 시작되는 모든 기록을 로깅하지 않습니다.", inline = False)
+                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍselfcheck Command's Result")
+                embed.add_field(name = "How to register", value = "/selfcheck 이름 생년월일(YYMMDD) 지역 학교이름 학교유형 비밀번호", inline = False)
+                embed.add_field(name = "Ex", value = "/selfcheck 홍길동 010101 서울 서울중 중학교 1111", inline = False)
+                embed.add_field(name = "Security", value = "사용자의 개인정보 보호를 위해, hcskr 모듈의 token 자가진단 함수를 사용중입니다. 모든 개인정보는 암호화하여 저장됩니다.", inline = False)
                 await ctx.respond(embed=embed)    
             else:
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(ctx.author.id)]['token']))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
-                embed.set_footer(text=f"//selfcheck 명령어의 결과입니다.")
+                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍselfcheck Command's Result")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)
@@ -81,7 +81,7 @@ class Tools(commands.Cog):
                 result = await hcskr.asyncTokenSelfCheck(str(selfcheck_list[str(i)]['token']))
                 dm_user = await self.app.fetch_user(int(i))
                 embed = discord.Embed(title=f"Covid19 Auto Selfcheck Result", color=0x0AB1C2)
-                embed.set_footer(text=f"Auto COVID19 SelfCheck Executed by {str(ctx.author)}")
+                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAuto COVID19 SelfCheck Executed by {str(ctx.author)}")
                 embed.add_field(name = "Running Info", value = f"Code '{result['code']}' is returned.", inline = False)
                 embed.add_field(name = "Code Info", value = f"{result['message']}", inline = False)
                 embed.add_field(name = "Executed Time", value = f"Executed at {result['regtime']}.", inline = False)

@@ -20,7 +20,7 @@ class BotManagement(commands.Cog):
 
     @tasks.loop(seconds = 30)
     async def status_change(self):
-        status_list = ["Made by KOI#4182. (Alpha v_3.1)", "`/invite` to join KOI Server!"]
+        status_list = ["Made by KOI#4182. (Alpha v_4)", "`/invite` to join KOI Server!"]
         for i in status_list:
             await asyncio.sleep(15)
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))
@@ -92,7 +92,7 @@ class BotManagement(commands.Cog):
             return None
           
         embed = discord.Embed(title=f"Koi_Bot Info", color=0x0AB1C2)
-        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_3.1 입니다.")
+        embed.set_footer(text=f"현재 봇의 버전은 Alpha v_4 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 KOI#4182 에 의해 제작되었습니다.", inline = False)
         embed.add_field(name = "License", value = "이 봇은 MIT 라이센스를 따르고 있습니다.", inline = False)
         embed.add_field(name = "Execution Environment1", value = "이 봇은 Galaxy S8+ with Termux and Pixel experience로 동작중입니다. (24h Server)", inline = False)
