@@ -50,7 +50,6 @@ class UserManagement(commands.Cog):
 
     @commands.has_permissions(manage_messages = True)
     @slash_command(name = "set_permission", guild_ids = [742201063972667487])
-    @permissions.has_any_role("Owner")
     async def SetPermission_command(self, ctx, command_user: discord.User, value1):
         if await Permission.check_permission(ctx, 3):
             return None

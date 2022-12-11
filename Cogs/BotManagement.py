@@ -26,7 +26,6 @@ class BotManagement(commands.Cog):
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))
     
     @slash_command(name = "update_delay", guild_ids = [742201063972667487])
-    @permissions.has_any_role("Owner")
     async def update_delay_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
@@ -48,7 +47,6 @@ class BotManagement(commands.Cog):
         
 
     @slash_command(name = "restart", guild_ids = [742201063972667487])
-    @permissions.has_any_role("Owner")
     async def restart_command(self,ctx):
         if await Permission.check_permission(ctx, 3):
             return None
@@ -70,7 +68,6 @@ class BotManagement(commands.Cog):
             await ctx.respond("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.bot)
 
     @slash_command(name = "stop", guild_ids = [742201063972667487])
-    @permissions.has_any_role("Owner")
     async def stop_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
