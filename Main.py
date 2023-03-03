@@ -4,15 +4,12 @@ from discord.commands import permissions
 
 import os
 
+import config
 from Utils import Permission
 from Utils import Logger
 
 cog_list = []
 bot = discord.Bot()
-
-def get_token(): # Get tokens from key.key
-    with open("Key.key", "r") as f:
-        return f.readline().strip()
 
 @bot.event # Statement changing
 async def on_ready():
@@ -23,6 +20,8 @@ async def on_ready():
 
 for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
     if filename.endswith(".py"):
+        if filename.startswith("bak_"):
+            continue
         bot.load_extension(f"Cogs.{filename[:-3]}")
         cog_list.append(filename[:-3])
 
@@ -76,4 +75,4 @@ async def reload_commands(ctx, extension=None):
         await Logger.info(f"Extension {extension} is reloaded.", bot)
 
 
-bot.run(get_token())
+bot.run(config.discord_key)
