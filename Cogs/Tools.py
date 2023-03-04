@@ -48,6 +48,7 @@ class Tools(commands.Cog):
         school_member[str(ctx.author.id)] = class_num
         with open("Data/SchoolInfo.dat", "wb") as school_data:
             pickle.dump(school_member, school_data)
+        await ctx.respond(f"{str(ctx.author)}님이 학교 정보 알리미에 등록되었습니다!")
         
 
 def setup(app):
