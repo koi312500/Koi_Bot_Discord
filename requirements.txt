@@ -1,5 +1,6 @@
 py-cord
-hcskr
 pytz
 python-dateutil
 psutil
+selenium
+pyautogui
