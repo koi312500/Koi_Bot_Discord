@@ -26,11 +26,9 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
         cog_list.append(filename[:-3])
 
 @bot.slash_command(name="load", guild_ids = [742201063972667487])
-async def load_commands(ctx, extension):
+async def load_commands(ctx, extension):    
     if await Permission.check_permission(ctx, 3):
         return None
-    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
-    return None
     
     bot.load_extension(f"Cogs.{extension}")
     await ctx.respond(f"{extension} is loaded successfully!")
@@ -41,8 +39,6 @@ async def load_commands(ctx, extension):
 async def unload_commands(ctx, extension):
     if await Permission.check_permission(ctx, 3):
         return None
-    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
-    return None
 
     bot.unload_extension(f"Cogs.{extension}")
     await ctx.respond(f"{extension} is unloaded successfully!")
@@ -53,8 +49,6 @@ async def unload_commands(ctx, extension):
 async def reload_commands(ctx, extension=None):
     if await Permission.check_permission(ctx, 3):
         return None
-    msg = await ctx.respond(f"This command is not working. (Because of Slash Command)")
-    return None
 
     if extension is None:
         cog_list_tmp = list(cog_list)
@@ -64,7 +58,7 @@ async def reload_commands(ctx, extension=None):
             cog_list.remove(extension)
             bot.load_extension(f"Cogs.{extension}")
             cog_list.append(extension)
-        await msg.edit_original_message(content = f"All extensions are reloaded completely!")
+        await msg.edit_original_response(content = f"All extensions are reloaded completely!")
         await Logger.info("All Extensions are reloaded.", bot)
     else: 
         bot.unload_extension(f"Cogs.{extension}")
