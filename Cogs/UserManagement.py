@@ -13,7 +13,31 @@ from config import Slash_Command_Server as SCS
 class UserManagement(commands.Cog):
     def __init__(self, app):
         self.app = app
-        
+    
+    class MyView(discord.ui.View):
+        async def on_timeout(self):
+            await self.message.edit(view=self)
+
+        @discord.ui.button(label = "동의합니다", style=discord.ButtonStyle.primary, emoji="⭕")
+        async def first_button_callback(self, button, interaction):
+            permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
+            now_user = User(interaction.user)
+            for child in self.children:
+                child.disabled = True
+            content = f"Koi_Bot#4999 의 약관에 동의하셨습니다!\n"
+            content = content + f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.\n"
+            await self.message.edit(view=self)
+            await interaction.response.send_message(content = content)
+            if now_user.permission <= 1:
+                now_user.permission = 1
+
+        @discord.ui.button(label = "동의하지 않습니다", style=discord.ButtonStyle.primary, emoji="❌")
+        async def second_button_callback(self, button, interaction):
+            for child in self.children:
+                child.disabled = True
+            await self.message.edit(view=self)  
+            await interaction.response.send_message(content = "Koi_Bot#4999 의 약관에 동의하지 않으셨습니다. Koi_Bot의 기능을 사용하기 위해서는, 약관에 동의해주셔야 합니다.")
+
     @slash_command(name = "accept_term", guild_ids = SCS)
     async def AcceptTerm_command(self, ctx):
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
@@ -24,31 +48,7 @@ class UserManagement(commands.Cog):
         embed.add_field(name = "Term2", value = "Koi_Bot#4999에 당신의 Discord Nickname, ID가 제공됩니다.", inline = False)
         embed.add_field(name = "Result", value = f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.", inline = False)
         embed.add_field(name = "How to Agree", value = ":o: 반응을 추가함으로써, 약관에 동의하실 수 있습니다.", inline = False)
-        message = await ctx.respond(embed = embed)
-        await ctx.respond("현재 동의 확인 기능이 작동되지 않음에 따라, 무조건 동의로 처리됩니다. 양해 부탁드리며, 원치 않으시면 KOI#4182에게 연락하시기 바랍니다.")
-        if now_user.permission < 2:
-            now_user.permission = 1
-            await ctx.respond("Koi_Bot#4999 의 약관에 동의하셨습니다! ")
-            await ctx.respond(f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.")
-        return None
-        await message.add_reaction("⭕")
-        await message.add_reaction("❌")
-        reaction_list = ['⭕', '❌']
-        for r in reaction_list:
-            await message.add_reaction(r)
-        def check(reaction, user):
-            return str(reaction) in reaction_list and user == ctx.author and reaction.message.id == message.id
-        try:
-            reaction, _user = await self.app.wait_for("reaction_add", check=check, timeout=20.0)
-        except asyncio.TimeoutError:
-            await ctx.respond("시간 초과되었습니다.")
-        else:
-            if str(reaction) == '⭕':
-                await ctx.respond("Koi_Bot#4999 의 약관에 동의하셨습니다! ")
-                await ctx.respond(f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.")
-                now_user.permission = 1
-            else:
-                await ctx.respond("Koi_Bot#4999의 약관에 동의하지 않으셨습니다.")
+        message = await ctx.respond(embed = embed, view=self.MyView(timeout=15))
 
     @commands.has_permissions(manage_messages = True)
     @slash_command(name = "set_permission", guild_ids = SCS)
