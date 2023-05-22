@@ -5,6 +5,7 @@ from discord.commands import slash_command
 import psutil
 import socket
 
+from config import Slash_Command_Server as SCS
 from Utils import Permission
 from Utils import Logger
 
@@ -22,7 +23,7 @@ class LapTopManagement(commands.Cog):
             await channel.send(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
             await channel.send(f"Warning!!! Warning Message to : <@753625063357546556>\nBattery is unplugged, please shutdown the computer or solve the problem please.")
         
-    @slash_command(name = "battery_info", guild_ids = [742201063972667487])
+    @slash_command(name = "battery_info", guild_ids = SCS)
     async def battery_info_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
@@ -30,7 +31,7 @@ class LapTopManagement(commands.Cog):
         battery = psutil.sensors_battery()
         await ctx.respond(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
 
-    @slash_command(name = "ip_info", guild_ids = [742201063972667487])
+    @slash_command(name = "ip_info", guild_ids = SCS)
     async def ip_info_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None

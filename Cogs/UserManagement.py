@@ -8,11 +8,13 @@ from Utils import Permission
 from Utils import Logger
 from Utils.UserClass import UserClass as User
 
+from config import Slash_Command_Server as SCS
+
 class UserManagement(commands.Cog):
     def __init__(self, app):
         self.app = app
         
-    @slash_command(name = "accept_term", guild_ids = [742201063972667487])
+    @slash_command(name = "accept_term", guild_ids = SCS)
     async def AcceptTerm_command(self, ctx):
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
         now_user = User(ctx.author)
@@ -49,7 +51,7 @@ class UserManagement(commands.Cog):
                 await ctx.respond("Koi_Bot#4999의 약관에 동의하지 않으셨습니다.")
 
     @commands.has_permissions(manage_messages = True)
-    @slash_command(name = "set_permission", guild_ids = [742201063972667487])
+    @slash_command(name = "set_permission", guild_ids = SCS)
     async def SetPermission_command(self, ctx, command_user: discord.User, value1):
         if await Permission.check_permission(ctx, 3):
             return None

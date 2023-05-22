@@ -4,6 +4,7 @@ from discord.commands import slash_command
 
 import subprocess
 
+from config import Slash_Command_Server as SCS
 from Utils import Permission
 from Utils import Logger
 from Utils.UserClass import UserClass as User
@@ -13,7 +14,7 @@ class Development(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @slash_command(name = "test", guild_ids=[742201063972667487])
+    @slash_command(name = "test", guild_ids = SCS)
     async def test_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
@@ -21,7 +22,7 @@ class Development(commands.Cog):
         embed.add_field(name = "Embed's purpose", value = "To test Koi_Bot's Slash Command.", inline = False)
         await ctx.respond(embed = embed)
 
-    @slash_command(name = "git_pull", guild_ids = [742201063972667487])
+    @slash_command(name = "git_pull", guild_ids = SCS)
     async def git_pull_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None

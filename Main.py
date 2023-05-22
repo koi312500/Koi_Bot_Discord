@@ -4,6 +4,7 @@ from discord.commands import permissions
 
 import os
 
+from config import Slash_Command_Server as SCS
 import config
 from Utils import Permission
 from Utils import Logger
@@ -25,7 +26,7 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
         bot.load_extension(f"Cogs.{filename[:-3]}")
         cog_list.append(filename[:-3])
 
-@bot.slash_command(name="load", guild_ids = [742201063972667487])
+@bot.slash_command(name="load", guild_ids = SCS)
 async def load_commands(ctx, extension):    
     if await Permission.check_permission(ctx, 3):
         return None
@@ -35,7 +36,7 @@ async def load_commands(ctx, extension):
     cog_list.append(extension)
     await Logger.info(f"Extension {extension} is loaded.", bot)
 
-@bot.slash_command(name="unload", guild_ids = [742201063972667487])
+@bot.slash_command(name="unload", guild_ids = SCS)
 async def unload_commands(ctx, extension):
     if await Permission.check_permission(ctx, 3):
         return None
@@ -45,7 +46,7 @@ async def unload_commands(ctx, extension):
     cog_list.remove(extension)
     await Logger.info(f"Extension {extension} is unloaded.", bot)
 
-@bot.slash_command(name="reload", guild_ids = [742201063972667487])
+@bot.slash_command(name="reload", guild_ids = SCS)
 async def reload_commands(ctx, extension=None):
     if await Permission.check_permission(ctx, 3):
         return None
