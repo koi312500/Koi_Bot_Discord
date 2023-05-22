@@ -1,14 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pyautogui
+import time
 
 # 로그인할 사이트 목록 딕셔너리 정의
 
 class LoginBot:
     def __init__(self, site):
         # 엣지 웹 드라이버
-        self.driver = webdriver.Edge(executable_path="msedgedriver.exe")
+        options = webdriver.EdgeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        self.driver = webdriver.Edge(executable_path="msedgedriver.exe", options= options)
+        
         # 브라우저 해상도 설정
         self.driver.set_window_size(1600, 900)
         # 로그인하려는 사이트로 이동
@@ -25,23 +31,32 @@ class LoginBot:
 
     # 로그인을 수행하는 메서드입니다.
     def login(self, id, ps):
-        pyautogui.press("tab")
-        # 아이디 입력
-        pyautogui.write(id)
-        # tab 키
-        pyautogui.press("tab")
-        # 비밀번호 입력
-        pyautogui.write(ps)
-        # 엔터키 입력
-        pyautogui.press("enter")
-        # 5초 대기
+        login_box = self.driver.find_element(By.XPATH, '//*[@id="login_id"]')
+        login_box.send_keys(id)
+        login_box = self.driver.find_element(By.XPATH, '//*[@id="login_pw"]')
+        login_box.send_keys(ps)        
+        login_box.send_keys(Keys.ENTER)
         self.driver.implicitly_wait(time_to_wait=10)
 
     def self_learning(self):
+        XPATH_Range = ['tr[1]/td[4]/span/input', 'tr[2]/td[4]/span/input', 'tr[3]/td[4]/span/input']
+        wait = WebDriverWait(self.driver, 5)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/a')
         learning_box.send_keys(Keys.ENTER)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/ul/li[2]/a')
         learning_box.send_keys(Keys.ENTER)
+        for i in XPATH_Range:
+            time.sleep(4)
+            learning_box = self.driver.find_element(By.XPATH, '//*[@id="stu_subpg1_1"]/form/div[3]/div/div[2]/div/div/table/tbody/' + i)
+            learning_box.send_keys(Keys.ENTER)
+            print("Debug2")
+            time.sleep(4)
+            learning_box = self.driver.find_element(By.XPATH, '//*[@id="cls_idx19"]')
+            self.driver.execute_script("arguments[0].click();", learning_box)
+            time.sleep(2)
+            learning_box = self.driver.find_element(By.XPATH, '//*[@id="subpg1_3form"]/div/div/button[1]')
+            learning_box.send_keys(Keys.ENTER)
+
 
     # 스크린샷 메서드
     def save_screenshot(self):

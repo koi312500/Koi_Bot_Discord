@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord.commands import slash_command
 
-import os
+import subprocess
 
 from Utils import Permission
 from Utils import Logger
@@ -25,10 +25,11 @@ class Development(commands.Cog):
     async def git_pull_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
-        command_value = os.popen('git pull origin master').read()
-        print("Test")
+        fd_popen = subprocess.Popen("git pull origin master", shell = True, stdout=subprocess.PIPE).stdout
+        command_data = fd_popen.read().strip()
+        fd_popen.close()
         embed = discord.Embed(title = '/test Koi_Bot Slash Result', description = 'git pull command', color = 0x00ffff)
-        embed.add_field(name = "Result of the 'git pull origin master'", value = command_value, inline = False)
+        embed.add_field(name = "Result of the 'git pull origin master'", value = command_data, inline = False)
         await ctx.respond(embed = embed)
 
 def setup(app):

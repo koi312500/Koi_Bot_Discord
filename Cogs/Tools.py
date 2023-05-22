@@ -46,14 +46,13 @@ class Tools(commands.Cog):
                 
                 await dm_user.send(embed = embed)
 
-    @tasks.loop(hours = 1)
+    @tasks.loop(hours=1)
     async def school_study_loop(self):
         LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
         await self.app.wait_until_ready()
         TIME_ZONE = pytz.timezone('Asia/Seoul')
         currentTime = datetime.now(TIME_ZONE)
         if int(currentTime.hour) == 13:
-            print("Why didn't you called?")
             with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
             print(school_member)
@@ -64,16 +63,19 @@ class Tools(commands.Cog):
                     continue
                 embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
                 embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍPM 01:00 ~ PM 02:00 Auto School Auto Study Command")
-                crawler = lu.LoginBot(LOGIN_URL)
-                crawler.login(now_user[1], now_user[2])
-                crawler.self_learning()
-                crawler.save_screenshot()
-                crawler.kill()
-                embed.add_field(f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
-
-                
-                await dm_user.send(embed = embed)
-
+                try:
+                    crawler = lu.LoginBot(LOGIN_URL)
+                    crawler.login(now_user[1], now_user[2])
+                    crawler.self_learning()
+                    crawler.save_screenshot()
+                    crawler.kill()
+                    embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
+                    image = discord.File("test.png", filename="image.png")
+                    await dm_user.send(embed = embed, file = image)
+                except:
+                    print(Exception)
+                    embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
+                    await dm_user.send(embed = embed)
 
     @slash_command(name = "school_meal", guild_ids = [742201063972667487])
     async def school_meal_command(self, ctx, class_num : int):
