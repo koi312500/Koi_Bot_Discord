@@ -77,7 +77,7 @@ class Tools(commands.Cog):
                     embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
                     await dm_user.send(embed = embed)
 
-    @slash_command(name = "school_meal", guild_ids = [742201063972667487])
+    @slash_command(name = "school_meal", guild_ids = [742201063972667487, 1110128162794393631])
     async def school_meal_command(self, ctx, class_num : int):
         if await Permission.check_permission(ctx, 1):
             return None
@@ -88,7 +88,7 @@ class Tools(commands.Cog):
             pickle.dump(school_member, school_data)
         await ctx.respond(f"{str(ctx.author)}님이 학교 정보 알리미에 등록되었습니다!")
     
-    @slash_command(name = "auto_study", guild_ids = [742201063972667487])
+    @slash_command(name = "auto_study", guild_ids = [742201063972667487, 1110128162794393631])
     @option("place", description="자습 신청하실 장소를 결정해 주세요.", choices=["교실(1-5)", "자습실"])
     @option("power", description="자동 자습 신청을 On/Off 하실지 결정해 주세요.", choices = ["On", "Off"])
     async def register_auto_study_command(self, ctx, power : str, place : str, id : str, password : str):
