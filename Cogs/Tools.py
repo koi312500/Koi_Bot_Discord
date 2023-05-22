@@ -46,7 +46,7 @@ class Tools(commands.Cog):
                 
                 await dm_user.send(embed = embed)
 
-    @tasks.loop(hours=1)
+    @tasks.loop(hours = 1)
     async def school_study_loop(self):
         LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
         await self.app.wait_until_ready()
@@ -73,7 +73,6 @@ class Tools(commands.Cog):
                     image = discord.File("test.png", filename="image.png")
                     await dm_user.send(embed = embed, file = image)
                 except:
-                    print(Exception)
                     embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
                     await dm_user.send(embed = embed)
 
@@ -94,12 +93,26 @@ class Tools(commands.Cog):
     async def register_auto_study_command(self, ctx, power : str, place : str, id : str, password : str):
         if await Permission.check_permission(ctx, 1):
             return None
+        message = await ctx.respond(f"입력하신 정보가 유효한 정보인지 확인하는 중입니다....", ephemeral = True)
+        LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
+        try:
+            crawler = lu.LoginBot(LOGIN_URL)
+            crawler.login(id, password)
+            crawler.kill()
+        except:
+            await message.edit_original_response(content = f"자습 신청에 오류가 발생한것으로 보여, 등록되지 않았습니다. (입력한 값의 오류, 또는 서버의 문제로 발생합니다.)")
+            try:
+                crawler.kill()
+            except:
+                pass
+            return None
+
         with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
             school_member = pickle.load(school_data)
         school_member[str(ctx.author.id)] = [power, id, password, place]
         with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
             pickle.dump(school_member, school_data)
-        await ctx.respond(f"{ctx.author}님의 자습 자동 신청 시스템이 {power} 되셨습니다.", ephemeral = True)
+        await message.edit_original_response(content = f"{ctx.author}님의 자습 자동 신청 시스템이 {power} 되셨습니다.")
 
 
 def setup(app):
