@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from Utils import login_option as LO
 import pyautogui
 import time
 
@@ -39,19 +40,19 @@ class LoginBot:
         login_box.send_keys(Keys.ENTER)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/a')
 
-    def self_learning(self):
+    def self_learning(self, place : str):
         XPATH_Range = ['tr[1]/td[4]/span/input', 'tr[2]/td[4]/span/input', 'tr[3]/td[4]/span/input']
         self.driver.implicitly_wait(time_to_wait=10)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/a')
         learning_box.send_keys(Keys.ENTER)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/ul/li[2]/a')
-        learning_box.send_keys(Keys.ENTER)
+        learning_box.send_keys(Keys.ENTER)  
         for i in XPATH_Range:
             time.sleep(4)
             learning_box = self.driver.find_element(By.XPATH, '//*[@id="stu_subpg1_1"]/form/div[3]/div/div[2]/div/div/table/tbody/' + i)
             learning_box.send_keys(Keys.ENTER)
             time.sleep(4)
-            learning_box = self.driver.find_element(By.XPATH, '//*[@id="cls_idx19"]')
+            learning_box = self.driver.find_element(By.XPATH, '//*[@id="cls_idx' + str(LO.option.index(place)) +  ']')
             self.driver.execute_script("arguments[0].click();", learning_box)
             time.sleep(2)
             learning_box = self.driver.find_element(By.XPATH, '//*[@id="subpg1_3form"]/div/div/button[1]')

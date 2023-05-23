@@ -15,6 +15,7 @@ import dateutil.tz as gettz
 from config import Slash_Command_Server as SCS
 import config
 import Utils.login_utils as lu
+from Utils import login_option as LO
 from Utils import Logger
 from Utils import Permission
 
@@ -24,6 +25,24 @@ class Tools(commands.Cog):
         self.app = app
         self.school_loop.start()
         self.school_study_loop.start()
+
+    class OptionView(discord.ui.View):
+        @discord.ui.select(
+            placeholder = "어디서 평일 자습을 하실 생각이신가요?",
+            options = LO.discord_options,
+            min_values = 1,
+            max_values = 1
+        )
+
+        async def select_callback(self, select, interaction): # the function called when the user is done selecting options
+            with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
+                school_member = pickle.load(school_data)
+            school_member[str(interaction.user)][0] = "On"
+            school_member[str(interaction.user)][3] = select.values[0]
+            with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
+                pickle.dump(school_member, school_data)
+            await interaction.response.send_message(content = f"{interaction.user}님의 자습 자동 신청 시스템이 {select.values[0]} 으로 On 되셨습니다.")
+
 
     @tasks.loop(hours = 1)
     async def school_loop(self):
@@ -67,7 +86,7 @@ class Tools(commands.Cog):
                 try:
                     crawler = lu.LoginBot(LOGIN_URL)
                     crawler.login(now_user[1], now_user[2])
-                    crawler.self_learning()
+                    crawler.self_learning(now_user[3])
                     crawler.save_screenshot()
                     crawler.kill()
                     embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
@@ -89,11 +108,20 @@ class Tools(commands.Cog):
         await ctx.respond(f"{str(ctx.author)}님이 학교 정보 알리미에 등록되었습니다!")
     
     @slash_command(name = "auto_study", guild_ids = SCS)
-    @option("place", description="자습 신청하실 장소를 결정해 주세요.", choices=["교실(1-5)", "자습실"])
     @option("power", description="자동 자습 신청을 On/Off 하실지 결정해 주세요.", choices = ["On", "Off"])
-    async def register_auto_study_command(self, ctx, power : str, place : str, id : str, password : str):
+    async def register_auto_study_command(self, ctx, power : str, id : str, password : str):
         if await Permission.check_permission(ctx, 1):
             return None
+        
+        if power == "Off":
+            with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
+                school_member = pickle.load(school_data)
+            school_member[str(ctx.user)] = ["Off", id, password, None]
+            with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
+                pickle.dump(school_member, school_data)
+            await ctx.respond(f"{ctx.author}님의 자동 자습 신청이 Off 되었습니다.")
+            return None
+        
         message = await ctx.respond(f"입력하신 정보가 유효한 정보인지 확인하는 중입니다....", ephemeral = True)
         LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
         try:
@@ -107,13 +135,14 @@ class Tools(commands.Cog):
             except:
                 pass
             return None
-
+        
         with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
             school_member = pickle.load(school_data)
-        school_member[str(ctx.author.id)] = [power, id, password, place]
+        school_member[str(ctx.user)] = ["Off", id, password, None]
         with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
             pickle.dump(school_member, school_data)
-        await message.edit_original_response(content = f"{ctx.author}님의 자습 자동 신청 시스템이 {power} 되셨습니다.")
+
+        await message.edit_original_response(content = f"자습 신청 장소를 선택해 주세요.", view = self.OptionView(timeout = 20))
 
 
 def setup(app):
