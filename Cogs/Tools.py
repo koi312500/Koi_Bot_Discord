@@ -68,7 +68,7 @@ class Tools(commands.Cog):
                     await dm_user.send(embed = embed)
                 except:
                     pass
-        await Logger.info('School meal auto guide system activated.', self.app)
+            await Logger.info('School meal auto guide system activated.', self.app)
 
 
     @tasks.loop(hours = 1)
@@ -111,7 +111,7 @@ class Tools(commands.Cog):
                     embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
                     await dm_user.send(embed = embed)
                     await Logger.info(f"Error, {dm_user}'s auto study application didn't work properly.", self.app)
-        await Logger.info('School auto study appliction system activated.', self.app)
+            await Logger.info('School auto study appliction system activated.', self.app)
 
     @slash_command(name = "school_meal", guild_ids = SCS)
     async def school_meal_command(self, ctx, class_num : int):
