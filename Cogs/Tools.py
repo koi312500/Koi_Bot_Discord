@@ -37,8 +37,8 @@ class Tools(commands.Cog):
         async def select_callback(self, select, interaction): # the function called when the user is done selecting options
             with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
-            school_member[str(interaction.user)][0] = "On"
-            school_member[str(interaction.user)][3] = select.values[0]
+            school_member[str(interaction.user.id)][0] = "On"
+            school_member[str(interaction.user.id)][3] = select.values[0]
             with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
                 pickle.dump(school_member, school_data)
             await interaction.response.send_message(content = f"{interaction.user}님의 자습 자동 신청 시스템이 {select.values[0]} 으로 On 되셨습니다.")
@@ -138,7 +138,7 @@ class Tools(commands.Cog):
         
         with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
             school_member = pickle.load(school_data)
-        school_member[str(ctx.user)] = ["Off", id, password, None]
+        school_member[str(ctx.author.id)] = ["Off", id, password, None]
         with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
             pickle.dump(school_member, school_data)
 
