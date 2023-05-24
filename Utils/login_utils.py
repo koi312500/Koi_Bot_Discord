@@ -52,7 +52,7 @@ class LoginBot:
             learning_box = self.driver.find_element(By.XPATH, '//*[@id="stu_subpg1_1"]/form/div[3]/div/div[2]/div/div/table/tbody/' + i)
             learning_box.send_keys(Keys.ENTER)
             time.sleep(4)
-            learning_box = self.driver.find_element(By.XPATH, '//*[@id="cls_idx' + str(LO.option.index(place)) +  ']')
+            learning_box = self.driver.find_element(By.XPATH, '//*[@id="cls_idx' + str(LO.option.index(place)) +  '"]')
             self.driver.execute_script("arguments[0].click();", learning_box)
             time.sleep(2)
             learning_box = self.driver.find_element(By.XPATH, '//*[@id="subpg1_3form"]/div/div/button[1]')
