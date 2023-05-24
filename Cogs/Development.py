@@ -32,6 +32,7 @@ class Development(commands.Cog):
         embed = discord.Embed(title = '/test Koi_Bot Slash Result', description = 'git pull command', color = 0x00ffff)
         embed.add_field(name = "Result of the 'git pull origin master'", value = command_data, inline = False)
         await ctx.respond(embed = embed)
+        await Logger.info("git pull command is activated", self.bot)
 
 def setup(app):
     app.add_cog(Development(app))
