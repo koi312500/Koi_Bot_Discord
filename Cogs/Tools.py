@@ -53,18 +53,23 @@ class Tools(commands.Cog):
             with open("Data/SchoolInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
             for i in list(school_member.keys()):
-                dm_user = await self.app.fetch_user(int(i))
-                Food_type = ["아침", "점심", "저녁"]
-                embed = discord.Embed(title=f"대전과학고 정보 알리미!", color=0x0AB1C2)
-                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAM 06:00 ~ AM 07:00 Auto School Info Command")
-                url = config.meal_URL + str(currentTime.year) + str(currentTime.month).zfill(2) + str(currentTime.day).zfill(2) + config.meal_key
-                data = requests.get(url).json()
-                for j in range(0, 3):
-                    now_check = str(data['mealServiceDietInfo'][1]['row'][j]['DDISH_NM'].replace('<br/>', '\n'))
-                    embed.add_field(name = "급식 : " + str(Food_type[j]), value = now_check, inline = False)
+                try:
+                    dm_user = await self.app.fetch_user(int(i))
+                    Food_type = ["아침", "점심", "저녁"]
+                    embed = discord.Embed(title=f"대전과학고 정보 알리미!", color=0x0AB1C2)
+                    embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAM 06:00 ~ AM 07:00 Auto School Info Command")
+                    url = config.meal_URL + str(currentTime.year) + str(currentTime.month).zfill(2) + str(currentTime.day).zfill(2) + config.meal_key
+                    data = requests.get(url).json()
+                    for j in range(0, 3):
+                        now_check = str(data['mealServiceDietInfo'][1]['row'][j]['DDISH_NM'].replace('<br/>', '\n'))
+                        embed.add_field(name = "급식 : " + str(Food_type[j]), value = now_check, inline = False)
 
-                
-                await dm_user.send(embed = embed)
+                    
+                    await dm_user.send(embed = embed)
+                except:
+                    pass
+        await Logger.log('School meal auto guide system activated.', self.bot)
+
 
     @tasks.loop(hours = 1)
     async def school_study_loop(self):
@@ -78,7 +83,10 @@ class Tools(commands.Cog):
             print(school_member)
             for i in list(school_member.keys()):
                 now_user = school_member[i]
-                dm_user = await self.app.fetch_user(int(i))
+                try:
+                    dm_user = await self.app.fetch_user(int(i))
+                except:
+                    pass
                 if now_user[0] == "Off":
                     continue
                 embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
@@ -95,6 +103,8 @@ class Tools(commands.Cog):
                 except:
                     embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
                     await dm_user.send(embed = embed)
+                    await Logger.log(f"Error, {dm_user}'s auto study application didn't work properly.", self.bot)
+        await Logger.log('School auto study appliction system activated.', self.bot)
 
     @slash_command(name = "school_meal", guild_ids = SCS)
     async def school_meal_command(self, ctx, class_num : int):
