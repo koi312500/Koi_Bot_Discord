@@ -133,7 +133,7 @@ class Tools(commands.Cog):
         if power == "Off":
             with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
-            school_member[str(ctx.user)] = ["Off", id, password, None]
+            school_member[str(ctx.author.id)] = ["Off", id, password, None]
             with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
                 pickle.dump(school_member, school_data)
             await ctx.respond(f"{ctx.author}님의 자동 자습 신청이 Off 되었습니다.")
