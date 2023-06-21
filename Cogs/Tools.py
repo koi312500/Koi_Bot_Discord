@@ -39,9 +39,41 @@ class Tools(commands.Cog):
                 school_member = pickle.load(school_data)
             school_member[str(interaction.user.id)][0] = "On"
             school_member[str(interaction.user.id)][3] = select.values[0]
+            now_user = school_member[str(interaction.user.id)]
             with open("Data/SchoolStudyInfo.dat", "wb") as school_data:
                 pickle.dump(school_member, school_data)
-            await interaction.response.send_message(content = f"{interaction.user}님의 자습 자동 신청 시스템이 {select.values[0]} 으로 On 되셨습니다.")
+            message_content = f"{interaction.user}님의 자습 자동 신청 시스템이 {select.values[0]} 으로 On 되셨습니다."
+            await interaction.response.send_message(content = message_content)
+            TIME_ZONE = pytz.timezone('Asia/Seoul')
+            currentTime = datetime.now(TIME_ZONE)
+            if (int(currentTime.hour) > 13 and int(currentTime.hour) < 18) or (int(currentTime.hour) == 18 and int(currentTime.minute) < 30):
+                if int(currentTime.isoweekday()) >= 6:
+                   return
+                LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
+                embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
+                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAuto School Auto Study Command")
+                try:
+                    crawler = lu.LoginBot(LOGIN_URL)
+                except:
+                    pass
+                try:
+                    crawler.login(now_user[1], now_user[2])
+                    crawler.self_learning(now_user[3])
+                    crawler.save_screenshot()
+                    crawler.kill()
+                    embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
+                    image = discord.File("test.png", filename="image.png")
+                    message_content = "장소 신청이 완료되었습니다. 이후에는 매일 1시 ~ 2시에 자동으로 진행됩니다. 1시 ~ 2시의 경우 자동 스케줄러와 충돌이 발생할 수 있습니다."
+                    await interaction.followup.send(content = message_content, embed = embed, file = image)
+                except:
+                    try:
+                        crawler.kill()
+                    except:
+                        pass
+                    message_content = "장소 신청이 실패하였습니다. 미리 신청하셔둔 경우, 오류가 발생합니다. 1시 ~ 2시의 경우 자동 스케줄러와 충돌이 발생할 수 있습니다."
+                    embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 혹시 미리 신청하셨나요?")
+                    await interaction.followup.send(content = message_content, embed = embed)
+
 
 
     @tasks.loop(hours = 1)
@@ -78,6 +110,8 @@ class Tools(commands.Cog):
         TIME_ZONE = pytz.timezone('Asia/Seoul')
         currentTime = datetime.now(TIME_ZONE)
         if int(currentTime.hour) == 13:
+            if int(currentTime.isoweekday()) >= 6:
+                   return
             with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
             for i in list(school_member.keys()):
