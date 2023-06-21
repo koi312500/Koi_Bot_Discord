@@ -54,7 +54,7 @@ class ServerManagement(commands.Cog):
         await ctx.channel.purge(limit = int(amount))
         message = await ctx.respond(str(amount) + "개의 메세지를 지웠습니다.")
         await asyncio.sleep(3)
-        await message.delete_original_message()
+        await message.delete_original_response()
 
 def setup(app):
     app.add_cog(ServerManagement(app))
