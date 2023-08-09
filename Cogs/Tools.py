@@ -58,7 +58,10 @@ class Tools(commands.Cog):
                     pass
                 try:
                     crawler.login(now_user[1], now_user[2])
-                    crawler.self_learning(now_user[3])
+                    if now_user[1].startswith("2023") == False:
+                        crawler.self_learning(now_user[3], 1)
+                    else:
+                        crawler.self_learning(now_user[3], 0)
                     crawler.save_screenshot()
                     crawler.kill()
                     embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
@@ -131,7 +134,10 @@ class Tools(commands.Cog):
                     pass
                 try:
                     crawler.login(now_user[1], now_user[2])
-                    crawler.self_learning(now_user[3])
+                    if now_user[1].startswith("2023") == False:
+                        crawler.self_learning(now_user[3], 1)
+                    else:
+                        crawler.self_learning(now_user[3], 0)
                     crawler.save_screenshot()
                     crawler.kill()
                     embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
