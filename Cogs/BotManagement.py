@@ -48,7 +48,7 @@ class BotManagement(commands.Cog):
             await ctx.respond("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.bot)
         
 
-    @slash_command(name = "restart", guild_ids = SCS)
+    @slash_command(name = "restart_legacy", guild_ids = SCS)
     async def restart_command(self,ctx):
         if await Permission.check_permission(ctx, 3):
             return None
@@ -69,12 +69,13 @@ class BotManagement(commands.Cog):
             Logger.info("Cannot detect execution platform. Cannot update automatically.",self.bot)
             await ctx.respond("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.bot)
 
-    @slash_command(name = "stop", guild_ids = SCS)
+    @slash_command(name = "restart", guild_ids = SCS)
     async def stop_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
           
         await Logger.info("Exiting progress.", self.bot)
+        await Logger.info(f"Restart is requested by {ctx.author}", self.bot)
         await ctx.respond("Exiting progress.")
         exit()
    
