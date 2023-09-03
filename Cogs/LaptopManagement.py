@@ -5,6 +5,7 @@ from discord.commands import slash_command
 import psutil
 import socket
 
+import config
 from config import Slash_Command_Server as SCS
 from Utils import Permission
 from Utils import Logger
@@ -15,13 +16,13 @@ class LapTopManagement(commands.Cog):
         self.bot = bot
         self.battery_status_check.start()
 
-    @tasks.loop(minutes = 5)
+    @tasks.loop(minutes = 15)
     async def battery_status_check(self):
         battery = psutil.sensors_battery()
         if battery.power_plugged is not True:
             channel = await self.bot.fetch_channel(865999145600286741)
             await channel.send(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
-            await channel.send(f"Warning!!! Warning Message to : <@753625063357546556>\nBattery is unplugged, please shutdown the computer or solve the problem please.")
+            await channel.send(f"Warning: Server Laptop isn't charged.\nAlert to : <@753625063357546556>.")
         
     @slash_command(name = "battery_info", guild_ids = SCS)
     async def battery_info_command(self, ctx):
