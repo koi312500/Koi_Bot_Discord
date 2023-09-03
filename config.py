@@ -1,10 +1,7 @@
-discord_key = "Your_Discord_Key"
-#Please Write your discord token in 1'st line
+#Secret key
+from key import *
 
-meal_URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=G10&SD_SCHUL_CODE=7430032&type=json&MLSV_YMD="
-#Change SC_CODE ansd SCHUL_CODE that match your school
-meal_key = "Your_Neis_Key"
-#Please Write your neis token in 6'th line
-
-Slash_Command_Server = []
-#Please Write your Guild's ID in 9'th line
+#Bot Config
+bot_name = "Koi_Bot"
+now_ver = "1.1.0"
+status_list = [f"Made by @koi3125 (Ver {now_ver})", "`/invite` to join 『Hello, Discord!』 Server! (Ver {now_ver})"]

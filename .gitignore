@@ -129,8 +129,8 @@ dmypy.json
 .pyre/
 
 # Hidden Data
-.dat
-.key
+*.dat
+*.db
 
 # User
 .params
@@ -139,4 +139,4 @@ dmypy.json
 
 #Data
 Data/
-.config.py
+key.py
