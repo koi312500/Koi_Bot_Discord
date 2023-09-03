@@ -27,6 +27,7 @@ class Development(commands.Cog):
     async def update_command(self, ctx):
         if await Permission.check_permission(ctx, 3):
             return None
+        msg = await ctx.respond(f"/update Started. Wait for a second...")
         embed = discord.Embed(title = 'Update command Result', description = 'Remote update', color = 0x00ffff)
         fd_popen = subprocess.Popen("git pull origin master", shell = True, stdout=subprocess.PIPE).stdout
         command_data = fd_popen.read().strip()
@@ -41,7 +42,7 @@ class Development(commands.Cog):
             command_data = command_data[:700]
         embed.add_field(name = "Result of the `pip install -r requirements.txt`", value = command_data, inline = False)
         embed.set_footer(text=f"Sented by {config.bot_name}ㆍUpdate Command")
-        await ctx.respond(embed = embed)
+        await msg.edit_original_response(content = "", embed = embed)
         await Logger.info("update command is activated", self.bot)
 
 def setup(app):
