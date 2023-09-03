@@ -34,14 +34,12 @@ class Development(commands.Cog):
         if len(command_data) > 1024:
             command_data = command_data[:700]
         embed.add_field(name = "Result of the `git pull origin master`", value = command_data, inline = False)
-        print("Debug1 " + str(command_data))
         fd_popen = subprocess.Popen("pip install -r requirements.txt", shell = True, stdout=subprocess.PIPE).stdout
         command_data = fd_popen.read().strip()
         fd_popen.close()
         if len(command_data) > 1024:
             command_data = command_data[:700]
         embed.add_field(name = "Result of the `pip install -r requirements.txt`", value = command_data, inline = False)
-        print("Debug2 " + str(command_data))
         embed.set_footer(text=f"Sented by {config.bot_name}ㆍUpdate Command")
         await ctx.respond(embed = embed)
         await Logger.info("update command is activated", self.bot)
