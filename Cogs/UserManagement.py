@@ -38,7 +38,7 @@ class UserManagement(commands.Cog):
             await self.message.edit(view=self)  
             await interaction.response.send_message(content = f"{config.bot_name} 의 약관에 동의하지 않으셨습니다. {config.bot_name}의 기능을 사용하기 위해서는, 약관에 동의해주셔야 합니다.")
 
-    @slash_command(name = "accept_term", guild_ids = SCS)
+    @slash_command(name = "accept_term")
     async def AcceptTerm_command(self, ctx):
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
         now_user = User(ctx.author)

@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.edge.service import Service
+from selenium.webdriver.chrome.service import Service
 
 from Utils import login_option as LO
 import pyautogui
@@ -14,10 +14,10 @@ import time
 class LoginBot:
     def __init__(self, site):
         # 엣지 웹 드라이버
-        options = webdriver.EdgeOptions()
+        options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.driver = webdriver.Edge(options= options)
+        self.driver = webdriver.Chrome(options= options)
         
         # 브라우저 해상도 설정
         self.driver.set_window_size(1600, 900)
