@@ -9,6 +9,7 @@ import time
 import subprocess
 import platform
 
+import config
 from config import Slash_Command_Server as SCS
 from Utils import Permission
 from Utils import Logger
@@ -22,7 +23,7 @@ class BotManagement(commands.Cog):
     @tasks.loop(seconds = 30)
     async def status_change(self):
         await self.bot.wait_until_ready()
-        status_list = ["Made by KOI#4182. (Ver.3)", "`/invite` to join KOI Server!"]
+        status_list = config.status_list
         for i in status_list:
             await asyncio.sleep(15)
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))

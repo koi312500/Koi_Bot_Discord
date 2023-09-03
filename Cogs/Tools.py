@@ -46,12 +46,12 @@ class Tools(commands.Cog):
             await interaction.response.send_message(content = message_content)
             TIME_ZONE = pytz.timezone('Asia/Seoul')
             currentTime = datetime.now(TIME_ZONE)
-            if (int(currentTime.hour) > 13 and int(currentTime.hour) < 18) or (int(currentTime.hour) == 18 and int(currentTime.minute) < 30):
+            if (int(currentTime.hour) >= 13 and int(currentTime.hour) < 18) or (int(currentTime.hour) == 18 and int(currentTime.minute) < 30):
                 if int(currentTime.isoweekday()) >= 6:
                    return
                 LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
                 embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
-                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAuto School Auto Study Command")
+                embed.set_footer(text=f"Sented by {config.bot_name}ㆍAuto School Auto Study Command")
                 try:
                     crawler = lu.LoginBot(LOGIN_URL)
                 except:
@@ -85,6 +85,8 @@ class Tools(commands.Cog):
         TIME_ZONE = pytz.timezone('Asia/Seoul')
         currentTime = datetime.now(TIME_ZONE)
         if int(currentTime.hour) == 6:
+            if int(currentTime.isoweekday()) >= 6:
+                   return
             with open("Data/SchoolInfo.dat", "rb") as school_data:
                 school_member = pickle.load(school_data)
             for i in list(school_member.keys()):
@@ -92,12 +94,15 @@ class Tools(commands.Cog):
                     dm_user = await self.app.fetch_user(int(i))
                     Food_type = ["아침", "점심", "저녁"]
                     embed = discord.Embed(title=f"대전과학고 정보 알리미!", color=0x0AB1C2)
-                    embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍAM 06:00 ~ AM 07:00 Auto School Info Command")
+                    embed.set_footer(text=f"Sented by {config.bot_name}ㆍAM 06:00 ~ AM 07:00 Auto School Info Command")
                     url = config.meal_URL + str(currentTime.year) + str(currentTime.month).zfill(2) + str(currentTime.day).zfill(2) + config.meal_key
                     data = requests.get(url).json()
                     for j in range(0, 3):
-                        now_check = str(data['mealServiceDietInfo'][1]['row'][j]['DDISH_NM'].replace('<br/>', '\n'))
-                        embed.add_field(name = "급식 : " + str(Food_type[j]), value = now_check, inline = False)
+                        try:
+                            now_check = str(data['mealServiceDietInfo'][1]['row'][j]['DDISH_NM'].replace('<br/>', '\n'))
+                            embed.add_field(name = "급식 : " + str(Food_type[j]), value = now_check, inline = False)
+                        except:
+                            pass
 
                     
                     await dm_user.send(embed = embed)
@@ -127,7 +132,7 @@ class Tools(commands.Cog):
                 if now_user[0] == "Off":
                     continue
                 embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
-                embed.set_footer(text=f"Sented by Koi_Bot#4999ㆍPM 01:00 ~ PM 02:00 Auto School Auto Study Command")
+                embed.set_footer(text=f"Sented by {config.bot_name}ㆍPM 01:00 ~ PM 02:00 Auto School Auto Study Command")
                 try:
                     crawler = lu.LoginBot(LOGIN_URL)
                 except:

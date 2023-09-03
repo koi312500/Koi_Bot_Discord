@@ -4,11 +4,11 @@ from discord.ext import commands
 from discord.commands import permissions
 from discord.commands import slash_command
 
+import config
+from config import Slash_Command_Server as SCS
 from Utils import Permission
 from Utils import Logger
 from Utils.UserClass import UserClass as User
-
-from config import Slash_Command_Server as SCS
 
 class UserManagement(commands.Cog):
     def __init__(self, app):
@@ -24,7 +24,7 @@ class UserManagement(commands.Cog):
             now_user = User(interaction.user)
             for child in self.children:
                 child.disabled = True
-            content = f"Koi_Bot#4999 의 약관에 동의하셨습니다!\n"
+            content = f"{config.bot_name} 의 약관에 동의하셨습니다!\n"
             content = content + f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.\n"
             await self.message.edit(view=self)
             await interaction.response.send_message(content = content)
@@ -36,18 +36,18 @@ class UserManagement(commands.Cog):
             for child in self.children:
                 child.disabled = True
             await self.message.edit(view=self)  
-            await interaction.response.send_message(content = "Koi_Bot#4999 의 약관에 동의하지 않으셨습니다. Koi_Bot의 기능을 사용하기 위해서는, 약관에 동의해주셔야 합니다.")
+            await interaction.response.send_message(content = f"{config.bot_name} 의 약관에 동의하지 않으셨습니다. {config.bot_name}의 기능을 사용하기 위해서는, 약관에 동의해주셔야 합니다.")
 
     @slash_command(name = "accept_term", guild_ids = SCS)
     async def AcceptTerm_command(self, ctx):
         permission_message = ["Guest [Permission Level : 0]", "User [Permission Level : 1]", "Developer [Permission Level : 2]", "Owner [Permission Level : 3]"]
         now_user = User(ctx.author)
-        embed = discord.Embed(title=f"Koi_Bot 약관", color=0x0AB1C2)
-        embed.set_footer(text="Sented by Koi_Bot#4999ㆍaccept_term Command's Result")
-        embed.add_field(name = "Term1", value = "Koi_Bot#4999을 사용하시면서, 발생하는 모든 메세지 기록이 특별한 명시 없이 저장되는 것이 허용됩니다.", inline = False)
-        embed.add_field(name = "Term2", value = "Koi_Bot#4999에 당신의 Discord Nickname, ID가 제공됩니다.", inline = False)
+        embed = discord.Embed(title=f"{config.bot_name} 약관", color=0x0AB1C2)
+        embed.set_footer(text=f"Sented by {config.bot_name}ㆍaccept_term Command's Result")
+        embed.add_field(name = "Term1", value = f"{config.bot_name}을 사용하시면서, 발생하는 모든 메세지 기록이 특별한 명시 없이 저장되는 것이 허용됩니다.", inline = False)
+        embed.add_field(name = "Term2", value = f"{config.bot_name}에 당신의 Discord Nickname, ID가 제공됩니다.", inline = False)
         embed.add_field(name = "Result", value = f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.", inline = False)
-        embed.add_field(name = "How to Agree", value = ":o: 반응을 추가함으로써, 약관에 동의하실 수 있습니다.", inline = False)
+        embed.add_field(name = "How to Agree", value = f":o: 반응을 추가함으로써, 약관에 동의하실 수 있습니다.", inline = False)
         message = await ctx.respond(embed = embed, view=self.MyView(timeout=15))
 
     @commands.has_permissions(manage_messages = True)
@@ -69,10 +69,10 @@ class UserManagement(commands.Cog):
             now_user = User(ctx.author)
         else:
             now_user = User(command_user)
-        embed = discord.Embed(title=f"{str(now_user.name)} 님의 Koi_Bot Info", color=0x0AB1C2)
-        embed.set_footer(text = "Sented by Koi_Bot#4999ㆍuser Command's Result")
-        embed.add_field(name = "현재 레벨", value = f"{now_user.level}레벨, {now_user.exp} exp를 가지고 있어요! ", inline = False)
-        embed.add_field(name = "Permission", value = f"현재 권한 등급 : {str(permission_message[int(now_user.permission)])}")
+        embed = discord.Embed(title=f"{str(now_user.name)} 님의 {config.bot_name} Info", color=0x0AB1C2)
+        embed.set_footer(text = f"Sented by {config.bot_name}ㆍuser Command's Result")
+        embed.add_field(name = f"현재 레벨", value = f"{now_user.level}레벨, {now_user.exp} exp를 가지고 있어요! ", inline = False)
+        embed.add_field(name = f"Permission", value = f"현재 권한 등급 : {str(permission_message[int(now_user.permission)])}")
         await ctx.respond(embed=embed)  
 
 def setup(app):
