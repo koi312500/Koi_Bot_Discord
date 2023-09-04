@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 from Utils import login_option as LO
 import pyautogui
@@ -17,7 +18,7 @@ class LoginBot:
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.driver = webdriver.Chrome(options= options)
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options= options)
         
         # 브라우저 해상도 설정
         self.driver.set_window_size(1600, 900)

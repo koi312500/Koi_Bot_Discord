@@ -5,3 +5,4 @@ psutil
 selenium
 pyautogui
 requests
+webdriver-manager
