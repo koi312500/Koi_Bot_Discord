@@ -15,7 +15,7 @@ bot = discord.Bot()
 @bot.event # Statement changing
 async def on_ready():
     await Logger.info("Login to : " + str(bot.user.name) + "(code : " + str(bot.user.id) + ")", bot)
-    game = discord.Game("Running.........")
+    game = discord.Game("Starting....")
     await bot.change_presence(status=discord.Status.online, activity=game)
     await Logger.info("Bot is started!", bot)
 
