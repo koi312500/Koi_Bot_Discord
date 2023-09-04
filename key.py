@@ -1,10 +1,16 @@
-discord_key = "Your_Bot_Key"
-#Please Write your discord token in 1'st line
+# Discord Bot Token
+discord_key = "Your_Bot_Token"
 
-meal_URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=G10&SD_SCHUL_CODE=7430032&type=json&MLSV_YMD="
-#Change SC_CODE ansd SCHUL_CODE that match your school
-meal_key = "Your_Neis_API_Key"
-#Please Write your neis token in 6'th line
+# Neis API Token and URL(Change SC_CODE ansd SCHUL_CODE that match your school)
+SC_CODE = "Your_Code"
+SD_SCHUL_CODE = "Your_Code"
+meal_URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=" + SC_CODE + "&SD_SCHUL_CODE=" + SD_SCHUL_CODE + "&type=json&MLSV_YMD="
+meal_key = "&KEY=Your_Key"
 
-Slash_Command_Server = [Your_SCS_Guild_Id]
-#Please Write your Guild's ID in 9'th line
+# SCS Server's ID
+Slash_Command_Server = [Your_Guild_Id]
+
+# Debug config
+discord_key_debug = "YOUR_DEBUG_BOT_TOKEN"
+meal_key_debug = "&KEY=YOUR_DEBUG_KEY"
+Slash_Command_Server_debug = [YOUR_DEBUG_GUILD_ID]

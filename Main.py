@@ -14,7 +14,9 @@ bot = discord.Bot()
 
 @bot.event # Statement changing
 async def on_ready():
-    await Logger.info("Login to : " + str(bot.user.name) + "(code : " + str(bot.user.id) + ")", bot)
+    if config.debug:
+        await Logger.info(f"Debug Option Enabled. Debug Option : {config.debugOn}", bot)
+    await Logger.info(f"Login to : {config.bot_name} (Name : {bot.user.name} / ID : {bot.user.id})", bot)
     game = discord.Game("Starting....")
     await bot.change_presence(status=discord.Status.online, activity=game)
     await Logger.info("Bot is started!", bot)
@@ -69,5 +71,17 @@ async def reload_commands(ctx, extension=None):
         await ctx.respond(f"{extension} is reloaded successfully!")
         await Logger.info(f"Extension {extension} is reloaded.", bot)
 
+def debug_option():
+    if config.debugOn['Discord']:
+        config.discord_key = config.discord_key_debug
+    if config.debugOn['Neis']:
+        config.meal_key = config.meal_key_debug
+    if config.debugOn['SCS']:
+        config.Slash_Command_Server = config.Slash_Command_Server_debug
+    config.bot_name = config.debug_bot_name
+    config.status_list = config.debug_status_list
+
+if config.debug: # Configure Debug Option
+    debug_option()
 
 bot.run(config.discord_key)
