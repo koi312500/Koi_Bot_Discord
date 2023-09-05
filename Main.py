@@ -25,6 +25,8 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
     if filename.endswith(".py"):
         if filename.startswith("bak_"):
             continue
+        if not config.Laptop and filename.startswith("LaptopManagement"):
+            continue
         bot.load_extension(f"Cogs.{filename[:-3]}")
         cog_list.append(filename[:-3])
 
