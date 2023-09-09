@@ -28,27 +28,6 @@ class BotManagement(commands.Cog):
             await asyncio.sleep(15)
             await self.bot.change_presence(status = discord.Status.online, activity = discord.Game(i))
     
-    @slash_command(name = "update_delay", guild_ids = SCS)
-    async def update_delay_command(self, ctx):
-        if await Permission.check_permission(ctx, 3):
-            return None
-        await Logger.info("1H Server stop for update is requested.", self.bot)
-        if str(platform.system()) == "Windows":
-            await ctx.respond("Execution platform is **Windows**. Update_delay system for **Windows** is deleted by owner. No action.")
-            await Logger.info("No action because execution platform is Windows.", self.bot)
-        elif str(platform.system()) == "Linux":
-            await ctx.respond("Execution platform is **Linux**, Request to start update_delay.sh.")
-            subprocess.call("./update_delay.sh &", shell = True)
-            await Logger.info("Shell command './update_delay.sh &' is requested.", self.bot)
-            await Logger.info("Exiting progress.", self.bot)
-            await asyncio.sleep(3)
-            await ctx.respond("Done. Exiting progress.")
-            exit()
-        else:
-            Logger.info("Cannot detect execution platform. Cannot update automatically.",self.bot)
-            await ctx.respond("Cannot detect your execution platform. Cannot reboot your bot automatically.", self.bot)
-        
-
     @slash_command(name = "restart_legacy", guild_ids = SCS)
     async def restart_command(self,ctx):
         if await Permission.check_permission(ctx, 3):
