@@ -17,7 +17,7 @@ class Development(commands.Cog):
 
     @slash_command(name = "test", guild_ids = SCS)
     async def test_command(self, ctx):
-        if await Permission.check_permission(ctx, 3):
+        if await Permission.check_permission(ctx, 2):
             return None
         embed = discord.Embed(title = f'/test {config.bot_name} Slash Result', description = 'Test Succeed. Result printed.', color = 0x00ffff)
         embed.add_field(name = "Embed's purpose", value = f"To test {config.bot_name}'s Slash Command.", inline = False)
@@ -25,7 +25,7 @@ class Development(commands.Cog):
 
     @slash_command(name = "update", guild_ids = SCS)
     async def update_command(self, ctx):
-        if await Permission.check_permission(ctx, 3):
+        if await Permission.check_permission(ctx, 2):
             return None
         msg = await ctx.respond(f"/update Started. Wait for a second...")
         embed = discord.Embed(title = 'Update command Result', description = 'Remote update', color = 0x00ffff)

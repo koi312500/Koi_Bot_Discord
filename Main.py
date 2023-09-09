@@ -32,7 +32,7 @@ for filename in os.listdir("Cogs"): # Get all Cogs from Cogs folder
 
 @bot.slash_command(name="load", guild_ids = SCS)
 async def load_commands(ctx, extension):    
-    if await Permission.check_permission(ctx, 3):
+    if await Permission.check_permission(ctx, 2):
         return None
     
     bot.load_extension(f"Cogs.{extension}")
@@ -42,7 +42,7 @@ async def load_commands(ctx, extension):
 
 @bot.slash_command(name="unload", guild_ids = SCS)
 async def unload_commands(ctx, extension):
-    if await Permission.check_permission(ctx, 3):
+    if await Permission.check_permission(ctx, 2):
         return None
 
     bot.unload_extension(f"Cogs.{extension}")
@@ -52,7 +52,7 @@ async def unload_commands(ctx, extension):
 
 @bot.slash_command(name="reload", guild_ids = SCS)
 async def reload_commands(ctx, extension=None):
-    if await Permission.check_permission(ctx, 3):
+    if await Permission.check_permission(ctx, 2):
         return None
 
     if extension is None:

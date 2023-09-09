@@ -34,7 +34,7 @@ class LapTopManagement(commands.Cog):
 
     @slash_command(name = "ip_info", guild_ids = SCS)
     async def ip_info_command(self, ctx):
-        if await Permission.check_permission(ctx, 3):
+        if await Permission.check_permission(ctx, 2):
             return None
 
         hostname = socket.gethostname()
