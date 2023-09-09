@@ -51,7 +51,7 @@ class BotManagement(commands.Cog):
 
     @slash_command(name = "restart", guild_ids = SCS)
     async def stop_command(self, ctx):
-        if await Permission.check_permission(ctx, 3):
+        if await Permission.check_permission(ctx, 2):
             return None
           
         await Logger.info("Exiting progress.", self.bot)
@@ -64,7 +64,7 @@ class BotManagement(commands.Cog):
         if await Permission.check_permission(ctx, 1):
             return None
 
-        await ctx.respond("'Koi_Bot#4999'의 초대 링크 : https://discord.com/oauth2/authorize?client_id=905845362344996874&scope=bot%20applications.commands\n'Hello, Discord!' 서버(코이 서버)의 초대링크 : https://discord.gg/sX2K7eGdzT", ephemeral = True)
+        await ctx.respond(f"'{config.bot_name}'의 초대 링크 : https://discord.com/oauth2/authorize?client_id=905845362344996874&scope=bot%20applications.commands\n'Hello, Discord!' 서버(코이 서버)의 초대링크 : https://discord.gg/sX2K7eGdzT", ephemeral = True)
 
     @slash_command(name = "info")
     async def info_command(self,ctx):
@@ -75,9 +75,10 @@ class BotManagement(commands.Cog):
         embed.set_footer(text=f"현재 봇의 버전은 {config.now_ver} 입니다.")
         embed.add_field(name = "Owner/Maker", value = "이 봇은 @koi3125 에 의해 제작되었습니다.", inline = False)
         embed.add_field(name = "License", value = "이 봇은 MIT 라이센스를 따르고 있습니다.", inline = False)
-        embed.add_field(name = "Execution Environment1", value = "이 봇은 LG 15U560에서 동작중입니다. (24h Server)", inline = False)
+        embed.add_field(name = "Execution Environment1", value = "이 봇은 @krsirin 서버 Ubuntu 20.04 LTS 에서 동작중입니다. (24h Server)", inline = False)
         embed.add_field(name = "Execution Environment2", value = "이 봇은 Samsung Galaxy Book Ion 2 에서 동작중입니다. (Developing Server)", inline = False)
         embed.add_field(name = "Helper_Slack bot", value = "Koi_Bot이 Slack Bot인 시절에 도와주신 bright_minary님, name10님, hotmandu님에게 감사드립니다.", inline = False)
+        embed.add_field(name = "Helper_Hosting", value = "Koi_Bot이 24시간 돌아갈 수 있도록 서버 주인장 @krsirin, 호스트 @hutaogwaja, 관리자 @zero624님에게 감사드립니다.", inline = False)
         embed.add_field(name = "Reference Document", value = "이 봇은 이를 참조/사용하여 제작되었습니다.\n1. 키뮤님의 Setabot Framework : https://github.com/Kimu-Nowchira/SetaBot", inline = False)
         await ctx.respond(embed=embed)                                  
 
