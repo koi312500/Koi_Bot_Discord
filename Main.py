@@ -83,7 +83,8 @@ def debug_option():
     config.bot_name = config.debug_bot_name
     config.status_list = config.debug_status_list
 
-if config.debug: # Configure Debug Option
-    debug_option()
+if __name__ == "__main__":
+    if config.debug: # Configure Debug Option
+        debug_option()
 
-bot.run(config.discord_key)
+    bot.run(config.discord_key)
