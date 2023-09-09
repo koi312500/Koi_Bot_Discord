@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.commands import slash_command
 
+import random
 import subprocess
 
 import config
@@ -44,6 +45,19 @@ class Development(commands.Cog):
         embed.set_footer(text=f"Sented by {config.bot_name}ㆍUpdate Command")
         await msg.edit_original_response(content = "", embed = embed)
         await Logger.info("update command is activated", self.bot)
+
+    @slash_command(name = "givexp")
+    async def GiveXP_command(self, ctx):
+        if await Permission.check_permission(ctx, 1):
+            return None
+        now_user = User(ctx.author)
+        x, y = random.randint(1, 25), random.randint(1, 25)
+        if y == 25:
+            now_user.add_exp(x * 1000)
+            await ctx.respond(f"4% 당첨! XP를 {x * 1000}만큼 획득해서, {now_user.exp}의 xp를 보유중이에요!")
+        else:
+            now_user.add_exp(x)
+            await ctx.respond(f"XP를 {x}만큼 획득해서, {now_user.exp}의 xp를 보유중이에요!", ephemeral = True)
 
 def setup(app):
     app.add_cog(Development(app))

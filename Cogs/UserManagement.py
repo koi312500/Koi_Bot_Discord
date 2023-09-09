@@ -46,8 +46,8 @@ class UserManagement(commands.Cog):
         embed.set_footer(text=f"Sented by {config.bot_name}ㆍaccept_term Command's Result")
         embed.add_field(name = "Term1", value = f"{config.bot_name}을 사용하시면서, 발생하는 모든 메세지 기록이 특별한 명시 없이 저장되는 것이 허용됩니다.", inline = False)
         embed.add_field(name = "Term2", value = f"{config.bot_name}에 당신의 Discord Nickname, ID가 제공됩니다.", inline = False)
-        embed.add_field(name = "Result", value = f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, 'User [Permission Level : 1]' 으로 변경됩니다.", inline = False)
-        embed.add_field(name = "How to Agree", value = f":o: 반응을 추가함으로써, 약관에 동의하실 수 있습니다.", inline = False)
+        embed.add_field(name = "Result", value = f"Permission이 '{str(permission_message[int(now_user.permission)])}' 에서, '{permission_message[1]}' 으로 변경됩니다.", inline = False)
+        embed.add_field(name = "How to Agree", value = f":o: 버튼을 추가함으로써, 약관에 동의하실 수 있습니다.", inline = False)
         message = await ctx.respond(embed = embed, view=self.MyView(timeout=15))
 
     @commands.has_permissions(manage_messages = True)
