@@ -15,7 +15,6 @@ This respository was created by referring to the following respository.
 * Used at Logger.py, Permission.py, SetaSQLiteClass.py, UserClass.py at Utils folder.
 
 
-
 ## How to run
 1. Install Chrome to run `Tools.py`
     - Please install according to the execution environment.
@@ -27,3 +26,11 @@ This respository was created by referring to the following respository.
     - Replace `python Main.py` in run.sh and run.bat to `xvfb-run python Main.py`.
 6. Execute `run.sh` or `run.bat` to execute `Main.py`
 
+## To-Do
+
+- [ ] debug_options() error resolve
+- [ ] Optimize some codes
+  - [ ] Change sleep to implicitly_wait() at `login_utils.py`
+  - [ ] Asynchronous at `login_utils.py`
+  - [ ] Asynchronous at Meal Info of `login_utils.py` 
+- [ ] Add some function related with SQL
