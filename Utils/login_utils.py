@@ -41,6 +41,8 @@ class LoginBot:
         login_box = self.driver.find_element(By.XPATH, '//*[@id="login_pw"]')
         login_box.send_keys(ps)        
         login_box.send_keys(Keys.ENTER)
+        self.driver.implicitly_wait(time_to_wait=10)
+        time.sleep(2)
         learning_box = self.driver.find_element(By.XPATH, '//*[@id="mainNav"]/li[2]/a')
 
     def self_learning(self, place : str, age:int):
