@@ -110,52 +110,54 @@ class Tools(commands.Cog):
                     pass
             await Logger.info('School meal auto guide system activated.', self.app)
 
+    async def school_study_func(self): # 등록된 모든 학생의 자습신청을 돌리는 함수
+        LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
+        with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
+            school_member = pickle.load(school_data)
+        for i in list(school_member.keys()):
+            now_user = school_member[i]
+            dm_user = None
+            try:
+                dm_user = await self.app.fetch_user(int(i))
+            except:
+                continue
+            if now_user[0] == "Off":
+                continue
+            embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
+            embed.set_footer(text=f"Sented by {config.bot_name}ㆍPM 01:00 ~ PM 02:00 Auto School Auto Study Command")
+            try:
+                crawler = lu.LoginBot(LOGIN_URL)
+            except:
+                pass
+            try:
+                crawler.login(now_user[1], now_user[2])
+                if now_user[1].startswith("2023") == False:
+                    crawler.self_learning(now_user[3], 1)
+                else:
+                    crawler.self_learning(now_user[3], 0)
+                crawler.save_screenshot()
+                crawler.kill()
+                embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
+                image = discord.File("test.png", filename="image.png")
+                await dm_user.send(embed = embed, file = image)
+            except:
+                try:
+                    crawler.kill()
+                except:
+                    pass
+                embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
+                await dm_user.send(embed = embed)
+                await Logger.info(f"Error, {dm_user}'s auto study application didn't work properly.", self.app)
 
     @tasks.loop(hours = 1)
     async def school_study_loop(self):
-        LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
         await self.app.wait_until_ready()
         TIME_ZONE = pytz.timezone('Asia/Seoul')
         currentTime = datetime.now(TIME_ZONE)
         if int(currentTime.hour) == 13:
             if int(currentTime.isoweekday()) >= 6:
                    return
-            with open("Data/SchoolStudyInfo.dat", "rb") as school_data:
-                school_member = pickle.load(school_data)
-            for i in list(school_member.keys()):
-                now_user = school_member[i]
-                dm_user = None
-                try:
-                    dm_user = await self.app.fetch_user(int(i))
-                except:
-                    continue
-                if now_user[0] == "Off":
-                    continue
-                embed = discord.Embed(title=f"대전과학고 자동 자습 신청 시스템!", color=0x0AB1C2)
-                embed.set_footer(text=f"Sented by {config.bot_name}ㆍPM 01:00 ~ PM 02:00 Auto School Auto Study Command")
-                try:
-                    crawler = lu.LoginBot(LOGIN_URL)
-                except:
-                    pass
-                try:
-                    crawler.login(now_user[1], now_user[2])
-                    if now_user[1].startswith("2023") == False:
-                        crawler.self_learning(now_user[3], 1)
-                    else:
-                        crawler.self_learning(now_user[3], 0)
-                    crawler.save_screenshot()
-                    crawler.kill()
-                    embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
-                    image = discord.File("test.png", filename="image.png")
-                    await dm_user.send(embed = embed, file = image)
-                except:
-                    try:
-                        crawler.kill()
-                    except:
-                        pass
-                    embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
-                    await dm_user.send(embed = embed)
-                    await Logger.info(f"Error, {dm_user}'s auto study application didn't work properly.", self.app)
+            await self.school_study_func()
             await Logger.info('School auto study appliction system activated.', self.app)
 
     @slash_command(name = "school_meal", guild_ids = SCS)
@@ -184,6 +186,15 @@ class Tools(commands.Cog):
             await ctx.respond(f"{ctx.author}님의 자동 자습 신청이 Off 되었습니다.")
             return None
         
+        if id == "all" and password == "all":
+            if await Permission.check_permission(ctx, 3):
+                return None
+    
+            await ctx.respond("School auto study appliction system started manually.")
+            await self.school_study_func()
+            await Logger.info('School auto study appliction system activated manually.', self.app)
+            return None
+    
         message = await ctx.respond(f"입력하신 정보가 유효한 정보인지 확인하는 중입니다....", ephemeral = True)
         LOGIN_URL = "https://djshs.kr/theme/s007/index/member_login.php"
         try:
