@@ -27,10 +27,15 @@ This respository was created by referring to the following respository.
 6. Execute `run.sh` or `run.bat` to execute `Main.py`
 
 ## To-Do
+<details>
+<summary> To-Do List </summary>
 
+- [ ] Sync auto_study() date limitation with nice school meal API. (To ignore at School day off)
 - [ ] debug_options() error resolve
 - [ ] Optimize some codes
   - [ ] Change sleep to implicitly_wait() at `login_utils.py`
   - [ ] Asynchronous at `login_utils.py`
   - [ ] Asynchronous at Meal Info of `login_utils.py` 
 - [ ] Add some function related with SQL
+
+</details>
