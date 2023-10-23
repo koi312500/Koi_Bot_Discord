@@ -157,6 +157,16 @@ class Tools(commands.Cog):
         if int(currentTime.hour) == 13:
             if int(currentTime.isoweekday()) >= 6:
                    return
+            All_Diet = True
+            url = config.meal_URL + str(currentTime.year) + str(currentTime.month).zfill(2) + str(currentTime.day).zfill(2) + config.meal_key
+            data = requests.get(url).json()
+            for j in range(0, 3):
+                try:
+                    now_check = str(data['mealServiceDietInfo'][1]['row'][j]['DDISH_NM'].replace('<br/>', '\n'))
+                except:
+                    All_Diet = False
+            if All_Diet == False:
+                return
             await self.school_study_func()
             await Logger.info('School auto study appliction system activated.', self.app)
 
