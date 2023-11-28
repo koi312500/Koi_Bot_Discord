@@ -139,14 +139,20 @@ class Tools(commands.Cog):
                 crawler.kill()
                 embed.add_field(name = "Info", value = f"자습 신청이 {now_user[3]}로 정상적으로 신청되었습니다!")
                 image = discord.File("test.png", filename="image.png")
-                await dm_user.send(embed = embed, file = image)
+                try:
+                    await dm_user.send(embed = embed, file = image)
+                except:
+                    await Logger.info(f"Error, {dm_user}'s auto study application didn't work properly.\nAuto study application had activated, but DM is blocked.", self.app)
             except:
                 try:
                     crawler.kill()
                 except:
                     pass
                 embed.add_field(name = "Info(Error)", value = f"자습 신청에 오류가 발생했습니다. 수동으로 신청하시기 바랍니다.")
-                await dm_user.send(embed = embed)
+                try:
+                    await dm_user.send(embed = embed)
+                except:
+                    await Logger.info(f"Auto study application user {dm_user}'s DM is blocked. Cannot send message.", self.app)
                 await Logger.info(f"Error, {dm_user}'s auto study application didn't work properly.", self.app)
 
     @tasks.loop(hours = 1)
