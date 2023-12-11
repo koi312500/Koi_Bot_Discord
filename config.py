@@ -13,4 +13,4 @@ debug_bot_name = "Debug_Koi_Bot"
 debug_status_list = [f"Debugging Koi_Bot... (Ver {now_ver})", f"Debugged by @koi3125 (Ver {now_ver})"]
 
 #Environment Config
-Laptop = False
+Cogs_Excepction = ["Tools", "LaptopManagement"]
