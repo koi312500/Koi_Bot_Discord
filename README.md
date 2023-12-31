@@ -22,7 +22,8 @@ This respository was created by referring to the following respository.
 1. Install Chrome to run `Tools.py`
     - Please install according to the execution environment.
 2. Install python libraries to execute files.
-    - `requirements.bat` to install all libraries.
+    - Execute `requirements.bat` to install all libraries for Windows environment.
+    - If you needed, you can use `pip install -r requirements.txt` for library installation.
 3. Edit `config.py` and `key.py` to suit your environment.
 4. If your execution environment is non-display? (Such as docker)
     - Install xvfb to make virtual display (for `pyautogui`)
