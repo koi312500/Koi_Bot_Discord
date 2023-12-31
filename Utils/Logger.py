@@ -1,21 +1,21 @@
-#Originated from Kimu-Nowchira's Setabot Framework
-#Edited by KOI#4182
-
 from datetime import datetime
 import os
 
+# Function to handle errors
 def err(error):
     log(f'[Error] {error}', True)
     return error
 
+# Async function to send information to specific channels
 async def info(msg: str, app):
-    channel = app.get_channel(865999145600286741)
-    channel2 = app.get_channel(1110799032000978974)
+    channel = app.get_channel(865999145600286741)  # Channel ID for logging
+    channel2 = app.get_channel(1110799032000978974)  # Another Channel ID for logging
     text = f'[Info] {msg}'
-    await channel.send(f'Koi_Bot Logging - {text}')
-    await channel2.send(f'Koi_Bot Logging - {text}')
+    await channel.send(f'Koi_Bot Logging - {text}')  # Sending info to first channel
+    await channel2.send(f'Koi_Bot Logging - {text}')  # Sending info to second channel
     log(text)
 
+# Function to handle logging messages
 def msg(message):
     if message.content == "":
         return
@@ -23,25 +23,25 @@ def msg(message):
     author = message.author
 
     if 'DM' in str(type(message.channel)):
-        log_msg = f"[Message/DM] <{str(author)}> {message.content}"
+        log_msg = f"[Message/DM] <{str(author)}> {message.content}"  # Logging DM messages
     else:
         guild = message.guild
         channel = message.channel
-        log_msg = f"[Message/Server] <{guild.name} | {channel.name} | {str(author)} | {author.id}> {message.content}"
+        log_msg = f"[Message/Server] <{guild.name} | {channel.name} | {str(author)} | {author.id}> {message.content}"  # Logging server messages
 
     log(log_msg)
 
-
+# Function to log messages and optionally errors
 def log(msg: str, iserror=False):
     now = datetime.now()
     nowDatetime = now.strftime('%H:%M:%S')
     log_msg = f"{nowDatetime}ㆍ{msg}"
-    print(log_msg)
-    save(log_msg)
+    print(log_msg)  # Printing log message to console
+    save(log_msg)  # Saving log message to a text file
     if iserror:
-        save_error(log_msg)
+        save_error(log_msg)  # Saving error message to a separate text file if 'iserror' is True
 
-
+# Function to save logs to a text file
 def save(msg):
     now = datetime.now()
     time_text = now.strftime('%Y-%m-%d')
@@ -52,7 +52,7 @@ def save(msg):
     f.write(msg + '\n')
     f.close()
 
-
+# Function to save error logs to a separate text file
 def save_error(msg):
     now = datetime.now()
     time_text = now.strftime('%Y-%m-%d')
