@@ -22,11 +22,11 @@ class LapTopManagement(commands.Cog):
     @tasks.loop(minutes=15)
     async def battery_status_check(self):
         battery = psutil.sensors_battery()
-        if battery.power_plugged is not True:
+        if battery.percent < 50:
             # Fetching a specific channel and sending battery status and alerts
             channel = await self.bot.fetch_channel(865999145600286741)
             await channel.send(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
-            await channel.send(f"Warning: Server Laptop isn't charged.\nAlert to : <@753625063357546556>.")
+            await channel.send(f"The battery of the laptop running as a server is less than 50%. It seems like it's not charging...\nAlert : <@753625063357546556>.")
         
     # Slash command to get laptop's battery information
     @slash_command(name="battery_info", guild_ids=SCS)
