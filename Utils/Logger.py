@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import config
 
 # Function to handle errors
 def err(error):
@@ -8,11 +9,18 @@ def err(error):
 
 # Async function to send information to specific channels
 async def info(msg: str, app):
-    channel = app.get_channel(865999145600286741)  # Channel ID for logging
-    channel2 = app.get_channel(1110799032000978974)  # Another Channel ID for logging
+    log_channel = []
+    if config.debug:
+        log_channel = config.log_channel_debug
+    else:
+        log_channel = config.log_channel
+    
     text = f'[Info] {msg}'
-    await channel.send(f'Koi_Bot Logging - {text}')  # Sending info to first channel
-    await channel2.send(f'Koi_Bot Logging - {text}')  # Sending info to second channel
+    
+    for x in log_channel:
+        channel = app.get_channel(x)
+        await channel.send(f'Koi_Bot Logging - {text}')  # Sending info to channel
+
     log(text)
 
 # Function to handle logging messages

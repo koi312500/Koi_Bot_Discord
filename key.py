@@ -8,9 +8,11 @@ meal_URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE="
 meal_key = "&KEY=Your_Key"
 
 # SCS Server's ID
-Slash_Command_Server = [Your_Guild_Id]
+Slash_Command_Server = [YOUR_GUILD_ID] # Server ID
+log_channel = [YOUR_CHANNEL_ID] # Channel ID
 
 # Debug config
 discord_key_debug = "YOUR_DEBUG_BOT_TOKEN"
 meal_key_debug = "&KEY=YOUR_DEBUG_KEY"
 Slash_Command_Server_debug = [YOUR_DEBUG_GUILD_ID]
+log_channel_debug = [YOUR_DEBUG_CHANNEL_ID]
