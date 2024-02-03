@@ -1,7 +1,6 @@
 py-cord
 pytz
 python-dateutil
-psutil
 selenium
 pyautogui
 requests

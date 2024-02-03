@@ -4,13 +4,12 @@ This is a respository for Koi_Bot running on discord with python. (Koi_Bot#4999)
 
 This project was created out of a personal need.
 
--   LaptopManagement.py is written assuming that the code runs with the laptop as the server.
+-   LaptopManagement.py is written assuming that the code runs with the laptop as the server, optimized for specific computers.
 -   Tools.py, Utils/login_utils.py are written assuming that the user attends a specific school in Korea, Daejeon Science High School.
 -   Tools.py, Utils/login_utils.py would be deleted because of study application system's change.
 
 If it does not apply, you can remove it.
 
--   Python module `psutil` is only used at LaptopManagement.py.
 -   Python module `pytz`, `python-dateutil`, `selenium`, `pyautogui` are only used at Tools.py and login_utils.py.
 
 This respository was created by referring to the following respository.
@@ -36,12 +35,8 @@ This respository was created by referring to the following respository.
 <details>
 <summary> To-Do List </summary>
 
--   [ ] Sync auto_study() date limitation with nice school meal API. (To ignore at School day off)
 -   [ ] debug_options() error resolve
 -   [ ] Optimize some codes
-    -   [ ] Change sleep to implicitly_wait() at `login_utils.py`
-    -   [ ] Asynchronous at `login_utils.py`
-    -   [ ] Asynchronous at Meal Info of `login_utils.py`
 -   [ ] Add some function related with SQL
 
 </details>
