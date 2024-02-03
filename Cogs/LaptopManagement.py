@@ -2,8 +2,8 @@ from discord.ext import commands
 from discord.ext import tasks
 from discord.commands import slash_command
 
-import psutil
 import socket
+import requests
 
 # Importing configuration and utilities
 import config
@@ -21,7 +21,7 @@ class LapTopManagement(commands.Cog):
     # Task to check laptop's battery status every 15 minutes
     @tasks.loop(minutes=15)
     async def battery_status_check(self):
-        battery = psutil.sensors_battery()
+        battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
         if battery.percent < 50:
             # Fetching a specific channel and sending battery status and alerts
             channel = await self.bot.fetch_channel(865999145600286741)
@@ -34,7 +34,7 @@ class LapTopManagement(commands.Cog):
         if await Permission.check_permission(ctx, 3):
             return None
 
-        battery = psutil.sensors_battery()
+        battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
         await ctx.respond(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
 
     # Slash command to get computer's name and IP address
@@ -43,9 +43,12 @@ class LapTopManagement(commands.Cog):
         if await Permission.check_permission(ctx, 2):
             return None
 
-        hostname = socket.gethostname()
-        IpAddr = socket.gethostbyname(hostname)
-        await ctx.respond(f"Computer's name : {hostname}\nComputer's IP : {IpAddr}")
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+
+        ip = requests.get("https://api.ipify.org").text
+
+        await ctx.respond(f"Computer's Private IP: {s.getsockname()[0]}\nComputer's Public IP : {ip}")
                         
 # Function to setup the cog
 def setup(bot):
