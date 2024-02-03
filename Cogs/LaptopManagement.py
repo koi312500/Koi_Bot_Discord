@@ -22,7 +22,7 @@ class LapTopManagement(commands.Cog):
     @tasks.loop(minutes=15)
     async def battery_status_check(self):
         battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
-        if battery.percent < 50:
+        if battery < 50:
             # Fetching a specific channel and sending battery status and alerts
             channel = await self.bot.fetch_channel(865999145600286741)
             await channel.send(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
@@ -35,7 +35,8 @@ class LapTopManagement(commands.Cog):
             return None
 
         battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
-        await ctx.respond(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
+        charge_state=open("/sys/class/power_supply/CMB0/status","r").readline().strip()
+        await ctx.respond(f"Laptop's battery percentage : {battery}%, Power : {charge_state}")
 
     # Slash command to get computer's name and IP address
     @slash_command(name="ip_info", guild_ids=SCS)
