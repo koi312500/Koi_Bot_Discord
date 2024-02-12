@@ -2,6 +2,7 @@ from discord.ext import commands
 from discord.ext import tasks
 from discord.commands import slash_command
 
+import asyncio
 import socket
 import requests
 
@@ -48,7 +49,7 @@ class LapTopManagement(commands.Cog):
         s.connect(("8.8.8.8", 80))
 
         ip = requests.get("https://api.ipify.org").text
-
+        asyncio.sleep(1500)
         await ctx.respond(f"Computer's Private IP: {s.getsockname()[0]}\nComputer's Public IP : {ip}")
                         
 # Function to setup the cog
