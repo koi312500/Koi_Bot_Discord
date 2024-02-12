@@ -49,7 +49,6 @@ class LapTopManagement(commands.Cog):
         s.connect(("8.8.8.8", 80))
 
         ip = requests.get("https://api.ipify.org").text
-        await asyncio.sleep(1500)
         await ctx.respond(f"Computer's Private IP: {s.getsockname()[0]}\nComputer's Public IP : {ip}")
                         
 # Function to setup the cog
