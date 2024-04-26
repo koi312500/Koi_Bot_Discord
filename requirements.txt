@@ -1,7 +1,2 @@
 py-cord
-pytz
-python-dateutil
-selenium
-pyautogui
 requests
-webdriver-manager
