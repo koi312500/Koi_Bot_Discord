@@ -72,18 +72,13 @@ class Development(commands.Cog):
         await Logger.info("update command is activated", self.bot)
 
     # Command for giving XP to users
-    @slash_command(name="givexp")
-    async def GiveXP_command(self, ctx):
+    @slash_command(name="setxp")
+    async def GiveXP_command(self, ctx, command_user: discord.User, value1):
         if await Permission.check_permission(ctx, 2):
             return None
         now_user = User(ctx.author)
-        x, y = random.randint(1, 25), random.randint(1, 25)
-        if y == 25:
-            now_user.add_exp(x * 1000)
-            await ctx.respond(f"4% 당첨! XP를 {x * 1000}만큼 획득해서, {now_user.exp}의 xp를 보유중이에요!")
-        else:
-            now_user.add_exp(x)
-            await ctx.respond(f"XP를 {x}만큼 획득해서, {now_user.exp}의 xp를 보유중이에요!", ephemeral=True)
+        now_user.exp = value1
+        await ctx.reply(f"{now_user.name}'s exp is now {value1}")
 
 def setup(app):
     app.add_cog(Development(app))
