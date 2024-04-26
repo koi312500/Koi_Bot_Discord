@@ -1,11 +1,31 @@
 from discord.ext import commands
 import discord
+
+import time
+import random
+
 import config
 from Utils import Logger
+from Utils.UserClass import UserClass as User
+cooldown = {}
 
 class BotEvent(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_message(self, msg): # Give XP to all message.
+        member = User(msg.author.id)
+        global cooldown
+        if member.id in cooldown:
+            if time.time() - cooldown[member.id] < 60:
+                return
+
+        cooldown[member.id] = time.time()
+        member.add_exp(random.randint(15, 25))
+        print(member.exp)
+        
+        
 
     @commands.Cog.listener()
     async def on_application_command_error(self, ctx, error):

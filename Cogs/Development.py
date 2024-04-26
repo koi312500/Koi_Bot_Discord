@@ -74,7 +74,7 @@ class Development(commands.Cog):
     # Command for giving XP to users
     @slash_command(name="givexp")
     async def GiveXP_command(self, ctx):
-        if await Permission.check_permission(ctx, 1):
+        if await Permission.check_permission(ctx, 2):
             return None
         now_user = User(ctx.author)
         x, y = random.randint(1, 25), random.randint(1, 25)
