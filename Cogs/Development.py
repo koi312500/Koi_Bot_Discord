@@ -78,7 +78,7 @@ class Development(commands.Cog):
             return None
         now_user = User(ctx.author)
         now_user.exp = value1
-        await ctx.reply(f"{now_user.name}'s exp is now {value1}")
+        await ctx.respond(f"{now_user.name}'s exp is now {value1}")
 
 def setup(app):
     app.add_cog(Development(app))
