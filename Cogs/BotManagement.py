@@ -79,7 +79,7 @@ class BotManagement(commands.Cog):
         embed.add_field(name = "Execution Environment1", value = "이 봇은 LG 울트라PC 15U560에서 돌아가고 있습니다. (24/7 server)", inline = False)
         embed.add_field(name = "Execution Environment2", value = "이 봇은 Samsung Galaxy Book Ion 2 에서 동작중입니다. (Developing Server)", inline = False)
         embed.add_field(name = "Helper_Slack bot", value = "Koi_Bot이 Slack Bot인 시절에 도와주신 bright_minary님, name10님, hotmandu님에게 감사드립니다.", inline = False)
-        embed.add_field(name = "Helper_Contributer", value = "Koi_Bot의 코드를 개선해 주신 @aleu0091\_님께 감사드립니다.\n \
+        embed.add_field(name = "Helper_Contributer", value = "Koi_Bot의 코드를 개선해 주신 @aleu0091_님, @sangchoo1201님, @luya0369님께 감사드립니다.\n \
                         자세한 사항은 [Repository Contributer 링크](https://github.com/koi312500/Koi_Bot_Discord/contributors)에서 확인해 주시기 바랍니다.", inline = False)
         embed.add_field(name = "Reference Document", value = "이 봇은 이를 참조/사용하여 제작되었습니다.\n1. 키뮤님의 Setabot Framework : https://github.com/Kimu-Nowchira/SetaBot", inline = False)
         await ctx.respond(embed=embed)                                  
