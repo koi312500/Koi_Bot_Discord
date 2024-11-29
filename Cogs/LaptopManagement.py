@@ -25,9 +25,11 @@ class LapTopManagement(commands.Cog):
         battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
         if int(battery) < 50:
             # Fetching a specific channel and sending battery status and alerts
+            battery = open("/sys/class/power_supply/CMB0/capacity","r").readline().strip()
+            charge_state=open("/sys/class/power_supply/CMB0/status","r").readline().strip()
             channel = await self.bot.fetch_channel(865999145600286741)
-            await channel.send(f"Laptop's battery status : {battery.percent}%, Power : {battery.power_plugged}")
-            await channel.send(f"The battery of the laptop running as a server is less than 50%. It seems like it's not charging...\nAlert : <@753625063357546556>.")
+            await channel.send(f"Laptop's battery status : {battery}%, Power : {charge_state}")
+            await channel.send(f"서버의 충전상태를 확인해주시기 바랍니다.\nAlert : <@753625063357546556>.")
         
     # Slash command to get laptop's battery information
     @slash_command(name="battery_info", guild_ids=SCS)
