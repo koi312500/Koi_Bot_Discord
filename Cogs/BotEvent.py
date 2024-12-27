@@ -23,7 +23,6 @@ class BotEvent(commands.Cog):
 
         cooldown[member.id] = time.time()
         member.add_exp(random.randint(15, 25))
-        print(member.exp)
         
         
 
